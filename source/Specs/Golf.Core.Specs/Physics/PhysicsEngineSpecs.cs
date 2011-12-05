@@ -8,15 +8,11 @@ namespace Golf.Core.Specs.Physics
     [Subject(typeof (PhysicsEngine))]
     public class PhysicsEngineSpecs : Observes<PhysicsEngine>
     {
-        #region Nested type: when_it_is_started
-
         public class when_it_is_started
         {
-            private Because of = () => sut.Start();
+            Because of = () => sut.Start();
 
-            private It should_say_its_running = () => sut.Running.ShouldBeTrue();
+            It should_say_its_running = () => sut.Running.ShouldBeTrue();
         }
-
-        #endregion
     }
 }
