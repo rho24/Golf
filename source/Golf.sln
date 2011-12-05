@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Golf.Core", "Golf.Core\Golf.Core.csproj", "{C1FAFCBC-27FA-47D8-B7A1-81AA2130EDB6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Specs", "Specs", "{5414EA43-0CEC-465B-A4AD-A9B789771073}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Golf.Core.Specs", "Specs\Golf.Core.Specs\Golf.Core.Specs.csproj", "{6A3D2340-A06F-45EF-AA6D-77523EF76F1C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,8 +17,15 @@ Global
 		{C1FAFCBC-27FA-47D8-B7A1-81AA2130EDB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1FAFCBC-27FA-47D8-B7A1-81AA2130EDB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1FAFCBC-27FA-47D8-B7A1-81AA2130EDB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A3D2340-A06F-45EF-AA6D-77523EF76F1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A3D2340-A06F-45EF-AA6D-77523EF76F1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A3D2340-A06F-45EF-AA6D-77523EF76F1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A3D2340-A06F-45EF-AA6D-77523EF76F1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6A3D2340-A06F-45EF-AA6D-77523EF76F1C} = {5414EA43-0CEC-465B-A4AD-A9B789771073}
 	EndGlobalSection
 EndGlobal
