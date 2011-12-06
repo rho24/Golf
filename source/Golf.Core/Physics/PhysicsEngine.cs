@@ -3,7 +3,7 @@ namespace Golf.Core.Physics
     public class PhysicsEngine : IPhysicsEngine
     {
         public void Start() {
-            throw new System.NotImplementedException();
+            Running = true;
         }
 
         public bool Running { get; private set; }

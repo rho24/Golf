@@ -57,6 +57,7 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IGameEngine.cs" />
     <Compile Include="Physics\IPhysicsEngine.cs" />
     <Compile Include="Physics\PhysicsEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
