@@ -2,7 +2,9 @@
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Browser;
+using System.Windows.Controls;
 using Golf.Core;
+using Golf.Core.Messages;
 using Golf.Core.Physics;
 using Ninject;
 
@@ -20,17 +22,22 @@ namespace Golf.Client
 
         void Application_Startup(object sender, StartupEventArgs e) {
             var kernel = NinjectBootstrap();
+
+            var mainPage = new MainPage();
             var gameEngine = kernel.Get<IGameEngine>();
 
+            gameEngine.MessageBus.Subscribe(new ViewCreator(mainPage.LayoutRoot));
+
+            RootVisual = mainPage;
+            
             gameEngine.Start();
-            RootVisual = new MainPage();
         }
 
         IKernel NinjectBootstrap() {
             var kernel = new StandardKernel();
-            kernel.Bind<IGameEngine>().To<GameEngine>().InSingletonScope();
-            kernel.Bind<IPhysicsEngine>().To<PhysicsEngine>().InSingletonScope();
-
+            kernel.Bind<IGameEngine>().To<GameEngine>();
+            kernel.Bind<IPhysicsEngine>().To<PhysicsEngine>();
+            kernel.Bind<IMessageBus>().To<MessageBus>();
             return kernel;
         }
 
@@ -59,5 +66,22 @@ namespace Golf.Client
             }
             catch (Exception) {}
         }
+    }
+
+    public class ViewCreator : ISubscriber<GameObjectCreated>
+    {
+        readonly Canvas _layoutRoot;
+
+        public ViewCreator(Canvas layoutRoot) {
+            _layoutRoot = layoutRoot;
+        }
+
+        #region ISubscriber<GameObjectCreated> Members
+
+        public void Receive(GameObjectCreated message) {
+            _layoutRoot.Children.Add(new TextBlock {Text = "Object created!!!!"});
+        }
+
+        #endregion
     }
 }

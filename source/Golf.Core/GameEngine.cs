@@ -8,8 +8,9 @@ namespace Golf.Core
     {
         readonly IPhysicsEngine _physicsEngine;
 
-        public GameEngine(IPhysicsEngine physicsEngine) {
+        public GameEngine(IPhysicsEngine physicsEngine, IMessageBus messageBus) {
             _physicsEngine = physicsEngine;
+            MessageBus = messageBus;
         }
 
         #region IGameEngine Members
@@ -18,6 +19,8 @@ namespace Golf.Core
 
         public void Start() {
             _physicsEngine.Start();
+
+            MessageBus.Publish(new GameObjectCreated());
         }
 
         #endregion

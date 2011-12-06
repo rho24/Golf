@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="GameEngine.cs" />
     <Compile Include="IGameEngine.cs" />
+    <Compile Include="Messages\GameObjectCreated.cs" />
     <Compile Include="Messages\IMessage.cs" />
     <Compile Include="Messages\IMessageBus.cs" />
     <Compile Include="Messages\ISubscriber.cs" />
