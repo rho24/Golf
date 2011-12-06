@@ -21,16 +21,4 @@ namespace Golf.Core.Specs
             It should_start_the_PhysicsEngine = () => A.CallTo(() => physicsEngine.Start()).MustHaveHappened();
         }
     }
-
-    public class GameEngine : IGameEngine
-    {
-        readonly IPhysicsEngine _physicsEngine;
-        public GameEngine(IPhysicsEngine physicsEngine) {
-            _physicsEngine = physicsEngine;
-        }
-
-        public void Start() {
-            _physicsEngine.Start();
-        }
-    }
 }

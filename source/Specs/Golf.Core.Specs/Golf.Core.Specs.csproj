@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameEngineSpecs.cs" />
+    <Compile Include="Messages\MessageBusSpecs.cs" />
     <Compile Include="Physics\PhysicsEngineSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
