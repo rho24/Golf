@@ -56,6 +56,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Reactive">
+      <HintPath>..\..\packages\Rx-Main.1.0.10621\lib\Net4\System.Reactive.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -63,18 +66,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events\EventManager.cs" />
+    <Compile Include="Events\EventManagerSpecs.cs" />
     <Compile Include="GameEngineSpecs.cs" />
-    <Compile Include="Messages\MessageBusSpecs.cs" />
     <Compile Include="Physics\PhysicsEngineSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\Golf.Core\Golf.Core.csproj">
-      <Project>{C1FAFCBC-27FA-47D8-B7A1-81AA2130EDB6}</Project>
+      <Project>{2EE07030-215A-4593-BECE-82FDB696CC01}</Project>
       <Name>Golf.Core</Name>
     </ProjectReference>
   </ItemGroup>

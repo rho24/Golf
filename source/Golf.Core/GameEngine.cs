@@ -17,6 +17,8 @@ namespace Golf.Core
 
         public IMessageBus MessageBus { get; private set; }
 
+        public IObservable<IGameEvent> Events { get; private set; }
+
         public void Start() {
             _physicsEngine.Start();
 
