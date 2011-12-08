@@ -67,7 +67,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="GameObjects\GolfBall.xaml">
+    <Page Include="Views\GolfBallView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -82,8 +82,9 @@
     <Compile Include="EventsDebugPanel.xaml.cs">
       <DependentUpon>EventsDebugPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GameObjects\GolfBall.xaml.cs">
-      <DependentUpon>GolfBall.xaml</DependentUpon>
+    <Compile Include="IViewController.cs" />
+    <Compile Include="Views\GolfBallView.xaml.cs">
+      <DependentUpon>GolfBallView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

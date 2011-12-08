@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Reactive.Linq;
 using System.Windows;
-using Golf.Client.GameObjects;
 using Golf.Core;
-using Golf.Core.Events;
 
 namespace Golf.Client
 {
@@ -12,20 +9,30 @@ namespace Golf.Client
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow(IGameEngine gameEngine) {
+        readonly IViewController _viewController;
+
+        public MainWindow(IGameEngine gameEngine, IViewController viewController) {
             GameEngine = gameEngine;
-
-            var rand = new Random();
-            GameEngine.Events.OfType<GameObjectCreated>().Subscribe(
-                e => Canvas.Children.Add(new GolfBall {X = rand.NextDouble()*600, Y = rand.NextDouble()*400}));
-
+            _viewController = viewController;
             InitializeComponent();
+
+            viewController.Initialize(Canvas);
         }
 
         public IGameEngine GameEngine { get; private set; }
 
         void Start_OnClick(object sender, RoutedEventArgs e) {
             GameEngine.Start();
+        }
+
+        void Tick_OnClick(object sender, RoutedEventArgs e) {
+            var rand = new Random();
+            foreach (var view in _viewController.Views) {
+                view.Model.X = rand.NextDouble()*600;
+                view.Model.Y = rand.NextDouble()*400;
+
+                view.UpdatePosition();
+            }
         }
     }
 }

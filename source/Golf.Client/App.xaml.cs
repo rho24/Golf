@@ -18,7 +18,6 @@ namespace Golf.Client
 
             var mainWindow = kernel.Get<MainWindow>();
 
-
             mainWindow.Events.Initialize(mainWindow.GameEngine);
 
             mainWindow.Show();
@@ -32,6 +31,8 @@ namespace Golf.Client
             kernel.Bind<IPhysicsEngine>().To<PhysicsEngine>();
             kernel.Bind<IEventManager>().To<EventManager>().InSingletonScope();
             kernel.Bind<IEventAggregator>().To<IEventManager>();
+
+            kernel.Bind<IViewController>().To<ViewController>();
 
             return kernel;
         }

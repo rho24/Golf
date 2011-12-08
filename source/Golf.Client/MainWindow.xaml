@@ -5,6 +5,7 @@
     <Client:EventsDebugPanel x:Name="Events" DockPanel.Dock="Right" Width="200"></Client:EventsDebugPanel>
     <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
       <Button x:Name="Start" Click="Start_OnClick">Start</Button>
+      <Button x:Name="Tick" Click="Tick_OnClick">Tick</Button>
     </StackPanel>
     <Canvas x:Name="Canvas" Background="Green"></Canvas>
   </DockPanel>

@@ -1,5 +1,6 @@
 using System;
 using Golf.Core.Events;
+using Golf.Core.GameObjects;
 using Golf.Core.Physics;
 
 namespace Golf.Core
@@ -23,8 +24,10 @@ namespace Golf.Core
 
         public void Start() {
             _physicsEngine.Start();
-            
-            EventManager.Add(new GameObjectCreated());
+
+            var rand = new Random();
+            EventManager.Add(
+                new GameObjectCreated<GolfBall>(new GolfBall {X = rand.NextDouble()*600, Y = rand.NextDouble()*400}));
 
             EventManager.TriggerAll();
         }
