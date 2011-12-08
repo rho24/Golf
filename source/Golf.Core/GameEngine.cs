@@ -25,7 +25,6 @@ namespace Golf.Core
             _physicsEngine.Start();
             
             EventManager.Add(new GameObjectCreated());
-            EventManager.Add(new GameObjectCreated());
 
             EventManager.TriggerAll();
         }

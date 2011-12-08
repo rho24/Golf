@@ -1,9 +1,11 @@
 ﻿<Window x:Class="Golf.Client.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Client="clr-namespace:Golf.Client" Title="Golf" Height="350" Width="525">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Client="clr-namespace:Golf.Client" Title="Golf"
+        Height="768" Width="1024" ResizeMode="NoResize">
   <DockPanel>
     <Client:EventsDebugPanel x:Name="Events" DockPanel.Dock="Right" Width="200"></Client:EventsDebugPanel>
-    <Canvas x:Name="Canvas">
+    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
       <Button x:Name="Start" Click="Start_OnClick">Start</Button>
-    </Canvas>
+    </StackPanel>
+    <Canvas x:Name="Canvas" Background="Green"></Canvas>
   </DockPanel>
 </Window>
