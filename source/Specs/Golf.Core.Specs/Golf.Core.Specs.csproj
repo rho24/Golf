@@ -66,7 +66,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Events\EventManager.cs" />
     <Compile Include="Events\EventManagerSpecs.cs" />
     <Compile Include="GameEngineSpecs.cs" />
     <Compile Include="Physics\PhysicsEngineSpecs.cs" />

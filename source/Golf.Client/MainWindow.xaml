@@ -1,0 +1,9 @@
+﻿<Window x:Class="Golf.Client.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Client="clr-namespace:Golf.Client" Title="Golf" Height="350" Width="525">
+  <DockPanel>
+    <Client:EventsDebugPanel x:Name="Events" DockPanel.Dock="Right" Width="200"></Client:EventsDebugPanel>
+    <Canvas x:Name="Canvas">
+      <Button x:Name="Start" Click="Start_OnClick">Start</Button>
+    </Canvas>
+  </DockPanel>
+</Window>

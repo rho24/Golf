@@ -1,8 +1,7 @@
-﻿<Application xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-             x:Class="Golf.Client.App"
-             >
+﻿<Application x:Class="Golf.Client.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Application.Resources>
-        
+         
     </Application.Resources>
 </Application>

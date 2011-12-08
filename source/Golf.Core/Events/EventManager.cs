@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Reactive.Subjects;
-using Golf.Core.Events;
 
-namespace Golf.Core.Specs.Events
+namespace Golf.Core.Events
 {
     public class EventManager : IEventManager
     {

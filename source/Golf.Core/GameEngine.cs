@@ -8,21 +8,26 @@ namespace Golf.Core
     {
         readonly IPhysicsEngine _physicsEngine;
 
-        public GameEngine(IPhysicsEngine physicsEngine, IMessageBus messageBus) {
+        public GameEngine(IPhysicsEngine physicsEngine, IEventManager eventManager) {
             _physicsEngine = physicsEngine;
-            MessageBus = messageBus;
+            EventManager = eventManager;
         }
+
+        public IEventManager EventManager { get; private set; }
 
         #region IGameEngine Members
 
-        public IMessageBus MessageBus { get; private set; }
-
-        public IObservable<IGameEvent> Events { get; private set; }
+        public IObservable<IGameEvent> Events {
+            get { return EventManager.Events; }
+        }
 
         public void Start() {
             _physicsEngine.Start();
+            
+            EventManager.Add(new GameObjectCreated());
+            EventManager.Add(new GameObjectCreated());
 
-            MessageBus.Publish(new GameObjectCreated());
+            EventManager.TriggerAll();
         }
 
         #endregion
