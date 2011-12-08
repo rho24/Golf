@@ -1,6 +1,6 @@
 ﻿using System;
 using FakeItEasy;
-using Golf.Core.Messages;
+using Golf.Core.Events;
 using Machine.Specifications;
 using developwithpassion.specifications.fakeiteasy;
 
@@ -13,8 +13,8 @@ namespace Golf.Core.Specs.Messages
         {
             public class when_a_message_is_published
             {
-                static readonly DummyMessage _message = new DummyMessage();
-                Because of = () => sut.Publish(_message);
+                static readonly DummyGameEvent GameEvent = new DummyGameEvent();
+                Because of = () => sut.Publish(GameEvent);
 
                 It should_succeed = () => true.ShouldBeTrue();
             }
@@ -22,9 +22,9 @@ namespace Golf.Core.Specs.Messages
 
             public class when_the_subscriber_is_subscribed
             {
-                static ISubscriber<DummyMessage> _subscriber;
+                static ISubscriber<DummyGameEvent> _subscriber;
 
-                Establish context = () => { _subscriber = fake.an<ISubscriber<DummyMessage>>(); };
+                Establish context = () => { _subscriber = fake.an<ISubscriber<DummyGameEvent>>(); };
                 Because of = () => sut.Subscribe(_subscriber);
 
                 It should_no_longer_be_a_subscriber = () => sut.Subscribers.ShouldContain(_subscriber);
@@ -33,20 +33,20 @@ namespace Golf.Core.Specs.Messages
 
         public class when_there_is_subscriber
         {
-            static ISubscriber<DummyMessage> _subscriber;
+            static ISubscriber<DummyGameEvent> _subscriber;
 
             Establish context = () => {
-                                    _subscriber = fake.an<ISubscriber<DummyMessage>>();
+                                    _subscriber = fake.an<ISubscriber<DummyGameEvent>>();
                                     sut_setup.run(m => m.Subscribe(_subscriber));
                                 };
 
             public class when_a_message_is_published
             {
-                static readonly DummyMessage _message = new DummyMessage();
-                Because of = () => sut.Publish(_message);
+                static readonly DummyGameEvent GameEvent = new DummyGameEvent();
+                Because of = () => sut.Publish(GameEvent);
 
                 It should_pass_it_onto_the_subscriber =
-                    () => A.CallTo(() => _subscriber.Receive(_message)).MustHaveHappened();
+                    () => A.CallTo(() => _subscriber.Receive(GameEvent)).MustHaveHappened();
             }
 
             public class when_the_subscriber_is_unsubscribed
@@ -59,27 +59,27 @@ namespace Golf.Core.Specs.Messages
 
         public class when_there_is_subscriber_of_a_subclass
         {
-            static ISubscriber<SubDummyMessage> _subscriber;
+            static ISubscriber<SubDummyGameEvent> _subscriber;
 
             Establish context = () => {
-                                    _subscriber = fake.an<ISubscriber<SubDummyMessage>>();
+                                    _subscriber = fake.an<ISubscriber<SubDummyGameEvent>>();
                                     sut_setup.run(m => m.Subscribe(_subscriber));
                                 };
 
             public class when_a_message_is_published
             {
-                static readonly SubDummyMessage _message = new SubDummyMessage();
-                Because of = () => sut.Publish(_message);
+                static readonly SubDummyGameEvent GameEvent = new SubDummyGameEvent();
+                Because of = () => sut.Publish(GameEvent);
 
                 It should_pass_it_onto_the_subscriber =
-                    () => A.CallTo(() => _subscriber.Receive(_message)).MustHaveHappened();
+                    () => A.CallTo(() => _subscriber.Receive(GameEvent)).MustHaveHappened();
             }
         }
     }
 
-    public class SubDummyMessage : DummyMessage
+    public class SubDummyGameEvent : DummyGameEvent
     {}
 
-    public class DummyMessage : IMessage
+    public class DummyGameEvent : IGameEvent
     {}
 }

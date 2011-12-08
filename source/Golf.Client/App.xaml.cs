@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Browser;
 using System.Windows.Controls;
 using Golf.Core;
-using Golf.Core.Messages;
+using Golf.Core.Events;
 using Golf.Core.Physics;
 using Ninject;
 
@@ -26,10 +27,11 @@ namespace Golf.Client
             var mainPage = new MainPage();
             var gameEngine = kernel.Get<IGameEngine>();
 
-            gameEngine.MessageBus.Subscribe(new ViewCreator(mainPage.LayoutRoot));
+            gameEngine.Events.OfType<GameObjectCreated>().Subscribe(
+                m => mainPage.LayoutRoot.Children.Add(new TextBlock {Text = "Object created!!!!"}));
 
             RootVisual = mainPage;
-            
+
             gameEngine.Start();
         }
 
@@ -78,9 +80,7 @@ namespace Golf.Client
 
         #region ISubscriber<GameObjectCreated> Members
 
-        public void Receive(GameObjectCreated message) {
-            _layoutRoot.Children.Add(new TextBlock {Text = "Object created!!!!"});
-        }
+        public void Receive(GameObjectCreated message) {}
 
         #endregion
     }

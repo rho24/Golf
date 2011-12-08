@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Golf.Core.Messages
+namespace Golf.Core.Events
 {
     public class MessageBus : IMessageBus
     {
@@ -20,7 +20,7 @@ namespace Golf.Core.Messages
             _subscribers.Add(subscriber);
         }
 
-        public void Publish<T>(T message) where T : IMessage {
+        public void Publish<T>(T message) where T : IGameEvent {
             foreach (var subscriber in _subscribers.OfType<ISubscriber<T>>()) {
                 subscriber.Receive(message);
             }

@@ -1,5 +1,5 @@
 using System;
-using Golf.Core.Messages;
+using Golf.Core.Events;
 using Golf.Core.Physics;
 
 namespace Golf.Core
