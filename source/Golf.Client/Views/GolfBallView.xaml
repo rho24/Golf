@@ -4,21 +4,23 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d" Canvas.Left="{Binding Path=Model.X}"
              Canvas.Top="{Binding Path=Model.Y}">
-  <Ellipse HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" Width="10" Height="10"
-           RenderTransformOrigin="0.5,0.5">
-    <Ellipse.Fill>
-      <RadialGradientBrush>
-        <RadialGradientBrush.RelativeTransform>
-          <TransformGroup>
-            <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleY="1.245" ScaleX="0.92" />
-            <SkewTransform CenterY="0.5" CenterX="0.5" />
-            <RotateTransform CenterY="0.5" CenterX="0.5" />
-            <TranslateTransform X="0.289" Y="-0.092" />
-          </TransformGroup>
-        </RadialGradientBrush.RelativeTransform>
-        <GradientStop Color="Black" Offset="1" />
-        <GradientStop Color="White" />
-      </RadialGradientBrush>
-    </Ellipse.Fill>
-  </Ellipse>
+  <Canvas Height="0" Width="0">
+    <Ellipse HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" Width="15" Height="15"
+           RenderTransformOrigin="0.5,0.5" Canvas.Left="-7.5" Canvas.Top="-7.5">
+      <Ellipse.Fill>
+        <RadialGradientBrush>
+          <RadialGradientBrush.RelativeTransform>
+            <TransformGroup>
+              <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleY="1.245" ScaleX="0.92" />
+              <SkewTransform CenterY="0.5" CenterX="0.5" />
+              <RotateTransform CenterY="0.5" CenterX="0.5" />
+              <TranslateTransform X="0.289" Y="-0.092" />
+            </TransformGroup>
+          </RadialGradientBrush.RelativeTransform>
+          <GradientStop Color="Black" Offset="1" />
+          <GradientStop Color="White" />
+        </RadialGradientBrush>
+      </Ellipse.Fill>
+    </Ellipse>
+  </Canvas>
 </UserControl>
