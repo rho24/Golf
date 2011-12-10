@@ -53,6 +53,7 @@
     <Compile Include="Events\IMessageBus.cs" />
     <Compile Include="Events\ISubscriber.cs" />
     <Compile Include="Events\MessageBus.cs" />
+    <Compile Include="Events\TickEvent.cs" />
     <Compile Include="GameEngine.cs" />
     <Compile Include="GameObjects\GolfBall.cs" />
     <Compile Include="IGameEngine.cs" />

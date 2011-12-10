@@ -4,7 +4,7 @@ using Golf.Core.GameObjects;
 
 namespace Golf.Client.ViewModels
 {
-    public class ShotControlModel : ViewModelBase
+    public class ShotControlViewModel : ViewModelBase
     {
         public GolfBall PlayersBall { get; set; }
         public double PowerX { get; set; }
@@ -30,7 +30,9 @@ namespace Golf.Client.ViewModels
             return true;
         }
 
+#pragma warning disable 67
         public event EventHandler CanExecuteChanged;
+#pragma warning restore 67
 
         #endregion
     }

@@ -13,12 +13,5 @@ namespace Golf.Core.Specs
 
         Establish context = () => { physicsEngine = depends.on<IPhysicsEngine>(); };
 
-        public class when_it_is_started
-        {
-
-            Because of = () => sut.Start();
-
-            It should_start_the_PhysicsEngine = () => A.CallTo(() => physicsEngine.Start()).MustHaveHappened();
-        }
     }
 }

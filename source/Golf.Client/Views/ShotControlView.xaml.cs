@@ -20,7 +20,7 @@ namespace Golf.Client.Views
                 .Subscribe(e => {
                                if (e == null) return;
                                var pos = e.EventArgs.GetPosition(CentreCursor);
-                               var model = (ShotControlModel) DataContext;
+                               var model = (ShotControlViewModel) DataContext;
                                model.PowerX = pos.X;
                                model.PowerY = pos.Y;
                                model.UpdatePosition();

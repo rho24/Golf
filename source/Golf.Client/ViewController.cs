@@ -14,11 +14,14 @@ namespace Golf.Client
     public class ViewController : IViewController
     {
         readonly IGameEngine _gameEngine;
+        readonly ICollection<ViewModelBase> _viewModels;
 
         public ViewController(IGameEngine gameEngine) {
             _gameEngine = gameEngine;
+            _gameEngine.Events.OfType<TickEvent>().Subscribe(OnTick);
             _gameEngine.Events.OfType<IGameObjectCreated<object>>().Subscribe(OnGameObjectCreated);
             Views = new ObservableCollection<UserControl>();
+            _viewModels = new List<ViewModelBase>();
         }
 
         #region IViewController Members
@@ -27,6 +30,12 @@ namespace Golf.Client
         
         #endregion
 
+        void OnTick(TickEvent e) {
+            foreach (var model in _viewModels) {
+                model.UpdatePosition();
+            }
+        }
+
         void OnGameObjectCreated(IGameObjectCreated<object> e) {
             if (e is GameObjectCreated<GolfBall>) {
                 var ball = ((GameObjectCreated<GolfBall>) e).GameObject;
@@ -34,6 +43,7 @@ namespace Golf.Client
                 var viewModel = new GolfBallViewModel {Model = ball};
                 view.DataContext = viewModel;
                 Views.Add(view);
+                _viewModels.Add(viewModel);
             }
         }
     }

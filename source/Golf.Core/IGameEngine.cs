@@ -9,6 +9,6 @@ namespace Golf.Core
         IObservable<IGameEvent> Events { get; }
         GolfBall PlayersBall { get; }
         void Initialize();
-        void Start();
+        void PlayShot(double powerX, double powerY);
     }
 }

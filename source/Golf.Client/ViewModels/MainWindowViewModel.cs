@@ -9,6 +9,7 @@ namespace Golf.Client.ViewModels
     public class MainWindowViewModel : ViewModelBase
     {
         readonly IViewController _viewController;
+        ShotControlView _shotControlView;
 
         public MainWindowViewModel(IGameEngine gameEngine, IViewController viewController) {
             _viewController = viewController;
@@ -23,23 +24,26 @@ namespace Golf.Client.ViewModels
 
         public void Initialize() {
             GameEngine.Initialize();
+
             AddShotControl();
         }
 
         void AddShotControl() {
-            var shotControlView =
-                new ShotControlView {
-                                        DataContext = new ShotControlModel {
-                                                                               PlayersBall =
-                                                                                   GameEngine.
-                                                                                   PlayersBall,
-                                                                               Hit =
-                                                                                   new ActionCommand(
-                                                                                   () =>
-                                                                                   GameEngine.Start())
-                                                                           }
-                                    };
-            SurfaceItems.Add(shotControlView);
+            if (_shotControlView != null) return;
+            _shotControlView = new ShotControlView();
+            _shotControlView.DataContext = new ShotControlViewModel {
+                                                                    PlayersBall = GameEngine.PlayersBall,
+                                                                    Hit = new ActionCommand(OnPlayerHit)
+                                                                };
+            SurfaceItems.Add(_shotControlView);
+        }
+
+        void OnPlayerHit() {
+            if (_shotControlView == null) return;
+            var model = (ShotControlViewModel)_shotControlView.DataContext;
+            SurfaceItems.Remove(_shotControlView);
+            _shotControlView = null;
+            GameEngine.PlayShot(model.PowerX, model.PowerY);
         }
     }
 }

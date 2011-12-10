@@ -31,13 +31,11 @@ namespace Golf.Core
             EventManager.TriggerAll();
         }
 
-        public void Start() {
+        public void PlayShot(double powerX, double powerY) {
+            PlayersBall.X = powerX;
+            PlayersBall.Y = powerY;
+            EventManager.Add(new TickEvent());
             _physicsEngine.Start();
-
-            var rand = new Random();
-            EventManager.Add(
-                new GameObjectCreated<GolfBall>(new GolfBall {X = rand.NextDouble()*600, Y = rand.NextDouble()*400}));
-
             EventManager.TriggerAll();
         }
 

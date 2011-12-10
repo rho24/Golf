@@ -5,7 +5,7 @@
              xmlns:Golf_Client_ViewModels="clr-namespace:Golf.Client.ViewModels" x:Class="Golf.Client.Views.ShotControlView"
              mc:Ignorable="d">
   <UserControl.DataContext>
-    <Golf_Client_ViewModels:ShotControlModel PowerX="100" PowerY="2" />
+    <Golf_Client_ViewModels:ShotControlViewModel PowerX="100" PowerY="2" />
   </UserControl.DataContext>
   <Canvas x:Name="CaptureSurface"
           Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Canvas}}}"
