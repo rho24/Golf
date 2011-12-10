@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -15,9 +14,9 @@ namespace Golf.Client.Views
         public ShotControlView(Canvas parent) {
             InitializeComponent();
 
-            Observable.FromEventPattern<MouseEventHandler, MouseEventArgs>(h => parent.PreviewMouseMove += h,
-                                                                           h => parent.PreviewMouseMove -= h)
-                .ObserveOnDispatcher()
+            Observable.FromEventPattern<MouseEventHandler, MouseEventArgs>(
+                h => parent.PreviewMouseMove += h,
+                h => parent.PreviewMouseMove -= h)
                 .Subscribe(e => {
                                if (e == null) return;
                                var pos = e.EventArgs.GetPosition(LayoutRoot);

@@ -36,16 +36,16 @@ namespace Golf.Client
         void OnGameObjectCreated(IGameObjectCreated<object> e) {
             if (e is GameObjectCreated<GolfBall>) {
                 var ball = ((GameObjectCreated<GolfBall>) e).GameObject;
-                var view = new GolfBallView(ball);
+                var view = new GolfBallView();
+                var viewModel = new GolfBallViewModel {Model = ball};
+                view.DataContext = viewModel;
                 _views.Add(view);
                 _canvas.Children.Add(view);
 
                 var shotControlView = new ShotControlView(_canvas) {
                                                                        DataContext =
                                                                            new ShotControlModel {
-                                                                                                    PlayersBall = ball,
-                                                                                                    PowerX = 214.0,
-                                                                                                    PowerY = 100.0
+                                                                                                    PlayersBall = ball
                                                                                                 }
                                                                    };
                 _canvas.Children.Add(shotControlView);

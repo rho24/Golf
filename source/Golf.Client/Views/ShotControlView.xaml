@@ -3,19 +3,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:Golf_Client_ViewModels="clr-namespace:Golf.Client.ViewModels" x:Class="Golf.Client.Views.ShotControlView"
-             mc:Ignorable="d" Width="0" Height="0" Canvas.Left="{Binding Path=PlayersBall.X}"
+             mc:Ignorable="d" Canvas.Left="{Binding Path=PlayersBall.X}"
              Canvas.Top="{Binding Path=PlayersBall.Y}">
-  <UserControl.Resources>
-    <Golf_Client_ViewModels:ShotControlModel x:Key="ShotControlModelDataSource" d:IsDataSource="True" />
-  </UserControl.Resources>
   <UserControl.DataContext>
     <Golf_Client_ViewModels:ShotControlModel PowerX="100" PowerY="2" />
   </UserControl.DataContext>
-  <Canvas x:Name="LayoutRoot" Height="0" Width="0">
-    <Path Data="M116,35 L114,61" Fill="#FFF4F4F5" Height="20" Canvas.Left="0" Stretch="Fill" Stroke="Black"
-          Canvas.Top="-10" Width="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
-    <Path Data="M77,62 L130,62" Fill="#FFF4F4F5" Height="1" Canvas.Left="-10" Stretch="Fill" Stroke="Black"
-          Canvas.Top="0" Width="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
+  <Canvas x:Name="LayoutRoot">
+    <Line X1="-10" Y1="0" X2="10" Y2="0" Stroke="Black" />
+    <Line X1="0" Y1="-10" X2="0" Y2="10" Stroke="Black" />
     <Line x:Name="ShotVector" X1="0" Y1="0" X2="{Binding PowerX}" Y2="{Binding PowerY}" Stroke="Black" />
   </Canvas>
 </UserControl>

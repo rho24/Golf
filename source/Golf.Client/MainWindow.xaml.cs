@@ -26,13 +26,6 @@ namespace Golf.Client
         }
 
         void Tick_OnClick(object sender, RoutedEventArgs e) {
-            var rand = new Random();
-            foreach (var view in _viewController.Views) {
-                view.Model.X = rand.NextDouble()*600;
-                view.Model.Y = rand.NextDouble()*400;
-
-                view.UpdatePosition();
-            }
         }
     }
 }

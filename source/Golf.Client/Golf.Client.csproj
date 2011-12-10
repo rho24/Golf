@@ -67,7 +67,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ViewController.cs" />
+    <Compile Include="ViewModels\GolfBallViewModel.cs" />
     <Compile Include="ViewModels\ShotControlModel.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\ShotControlView.xaml.cs">
       <DependentUpon>ShotControlView.xaml</DependentUpon>
     </Compile>
