@@ -3,10 +3,14 @@
         Height="768" Width="1024" ResizeMode="NoResize">
   <DockPanel>
     <Client:EventsDebugPanel x:Name="Events" DockPanel.Dock="Right" Width="200"></Client:EventsDebugPanel>
-    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
-      <Button x:Name="Start" Click="Start_OnClick">Start</Button>
-      <Button x:Name="Tick" Click="Tick_OnClick">Tick</Button>
+    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Height="20">
     </StackPanel>
-    <Canvas x:Name="Canvas" Background="Green"></Canvas>
+    <ItemsControl ItemsSource="{Binding Path=SurfaceItems}">
+      <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+          <Canvas x:Name="HoleSurface" Background="Green"></Canvas>
+        </ItemsPanelTemplate>
+      </ItemsControl.ItemsPanel>
+    </ItemsControl>
   </DockPanel>
 </Window>

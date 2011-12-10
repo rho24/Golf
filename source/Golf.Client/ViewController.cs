@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using System.Windows.Controls;
 using Golf.Client.ViewModels;
@@ -13,24 +14,17 @@ namespace Golf.Client
     public class ViewController : IViewController
     {
         readonly IGameEngine _gameEngine;
-        readonly ICollection<GolfBallView> _views = new List<GolfBallView>();
-        Canvas _canvas;
 
         public ViewController(IGameEngine gameEngine) {
             _gameEngine = gameEngine;
             _gameEngine.Events.OfType<IGameObjectCreated<object>>().Subscribe(OnGameObjectCreated);
+            Views = new ObservableCollection<UserControl>();
         }
 
         #region IViewController Members
 
-        public IEnumerable<GolfBallView> Views {
-            get { return _views; }
-        }
-
-        public void Initialize(Canvas canvas) {
-            _canvas = canvas;
-        }
-
+        public ObservableCollection<UserControl> Views { get; private set; }
+        
         #endregion
 
         void OnGameObjectCreated(IGameObjectCreated<object> e) {
@@ -39,16 +33,7 @@ namespace Golf.Client
                 var view = new GolfBallView();
                 var viewModel = new GolfBallViewModel {Model = ball};
                 view.DataContext = viewModel;
-                _views.Add(view);
-                _canvas.Children.Add(view);
-
-                var shotControlView = new ShotControlView(_canvas) {
-                                                                       DataContext =
-                                                                           new ShotControlModel {
-                                                                                                    PlayersBall = ball
-                                                                                                }
-                                                                   };
-                _canvas.Children.Add(shotControlView);
+                Views.Add(view);
             }
         }
     }

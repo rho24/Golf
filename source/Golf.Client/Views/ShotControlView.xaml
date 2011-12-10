@@ -3,14 +3,22 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:Golf_Client_ViewModels="clr-namespace:Golf.Client.ViewModels" x:Class="Golf.Client.Views.ShotControlView"
-             mc:Ignorable="d" Canvas.Left="{Binding Path=PlayersBall.X}"
-             Canvas.Top="{Binding Path=PlayersBall.Y}">
+             mc:Ignorable="d">
   <UserControl.DataContext>
     <Golf_Client_ViewModels:ShotControlModel PowerX="100" PowerY="2" />
   </UserControl.DataContext>
-  <Canvas x:Name="LayoutRoot">
-    <Line X1="-10" Y1="0" X2="10" Y2="0" Stroke="Black" />
-    <Line X1="0" Y1="-10" X2="0" Y2="10" Stroke="Black" />
-    <Line x:Name="ShotVector" X1="0" Y1="0" X2="{Binding PowerX}" Y2="{Binding PowerY}" Stroke="Black" />
+  <Canvas x:Name="CaptureSurface"
+          Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Canvas}}}"
+          Height="{Binding ActualHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Canvas}}}"
+          Canvas.ZIndex="999" Background="#00000000">
+    <Canvas.InputBindings>
+      <MouseBinding Command="{Binding Path=Hit}" MouseAction="LeftClick" />
+    </Canvas.InputBindings>
+
+    <Canvas x:Name="CentreCursor" Canvas.Left="{Binding Path=PlayersBall.X}" Canvas.Top="{Binding Path=PlayersBall.Y}">
+      <Line X1="-10" Y1="0" X2="10" Y2="0" Stroke="Black" />
+      <Line X1="0" Y1="-10" X2="0" Y2="10" Stroke="Black" />
+      <Line x:Name="ShotVector" X1="0" Y1="0" X2="{Binding PowerX}" Y2="{Binding PowerY}" Stroke="Black" />
+    </Canvas>
   </Canvas>
 </UserControl>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
-using Golf.Core;
+using Golf.Client.ViewModels;
+using Golf.Client.Views;
 
 namespace Golf.Client
 {
@@ -9,23 +10,8 @@ namespace Golf.Client
     /// </summary>
     public partial class MainWindow : Window
     {
-        readonly IViewController _viewController;
-
-        public MainWindow(IGameEngine gameEngine, IViewController viewController) {
-            GameEngine = gameEngine;
-            _viewController = viewController;
+        public MainWindow() {
             InitializeComponent();
-
-            viewController.Initialize(Canvas);
-        }
-
-        public IGameEngine GameEngine { get; private set; }
-
-        void Start_OnClick(object sender, RoutedEventArgs e) {
-            GameEngine.Start();
-        }
-
-        void Tick_OnClick(object sender, RoutedEventArgs e) {
         }
     }
 }

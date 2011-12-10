@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using Golf.Client.ViewModels;
 using Golf.Core;
 using Golf.Core.Events;
 using Golf.Core.Physics;
@@ -15,10 +16,11 @@ namespace Golf.Client
     {
         protected override void OnStartup(StartupEventArgs e) {
             var kernel = InitialiseNinject();
-
             var mainWindow = kernel.Get<MainWindow>();
-
-            mainWindow.Events.Initialize(mainWindow.GameEngine);
+            var viewModel = kernel.Get<MainWindowViewModel>();
+            mainWindow.DataContext = viewModel;
+            viewModel.Initialize();
+            mainWindow.Events.Initialize(viewModel.GameEngine);
 
             mainWindow.Show();
 

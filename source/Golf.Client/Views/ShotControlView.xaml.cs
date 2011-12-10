@@ -11,15 +11,15 @@ namespace Golf.Client.Views
     /// </summary>
     public partial class ShotControlView : UserControl
     {
-        public ShotControlView(Canvas parent) {
+        public ShotControlView() {
             InitializeComponent();
 
             Observable.FromEventPattern<MouseEventHandler, MouseEventArgs>(
-                h => parent.PreviewMouseMove += h,
-                h => parent.PreviewMouseMove -= h)
+                h => CaptureSurface.PreviewMouseMove += h,
+                h => CaptureSurface.PreviewMouseMove -= h)
                 .Subscribe(e => {
                                if (e == null) return;
-                               var pos = e.EventArgs.GetPosition(LayoutRoot);
+                               var pos = e.EventArgs.GetPosition(CentreCursor);
                                var model = (ShotControlModel) DataContext;
                                model.PowerX = pos.X;
                                model.PowerY = pos.Y;

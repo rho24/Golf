@@ -22,6 +22,15 @@ namespace Golf.Core
             get { return EventManager.Events; }
         }
 
+        public GolfBall PlayersBall { get; private set; }
+
+        public void Initialize() {
+            PlayersBall = new GolfBall {X = 100.0, Y = 100.0};
+            EventManager.Add(new GameObjectCreated<GolfBall>(PlayersBall));
+
+            EventManager.TriggerAll();
+        }
+
         public void Start() {
             _physicsEngine.Start();
 
