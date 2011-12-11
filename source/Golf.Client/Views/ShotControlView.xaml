@@ -15,7 +15,7 @@
       <MouseBinding Command="{Binding Path=Hit}" MouseAction="LeftClick" />
     </Canvas.InputBindings>
 
-    <Canvas x:Name="CentreCursor" Canvas.Left="{Binding Path=PlayersBall.X}" Canvas.Top="{Binding Path=PlayersBall.Y}">
+    <Canvas x:Name="CentreCursor" Canvas.Left="{Binding Path=PlayersBall.Body.Position.X}" Canvas.Top="{Binding Path=PlayersBall.Body.Position.Y}">
       <Line X1="-10" Y1="0" X2="10" Y2="0" Stroke="Black" />
       <Line X1="0" Y1="-10" X2="0" Y2="10" Stroke="Black" />
       <Line x:Name="ShotVector" X1="0" Y1="0" X2="{Binding PowerX}" Y2="{Binding PowerY}" Stroke="Black" />

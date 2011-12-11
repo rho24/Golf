@@ -30,7 +30,7 @@ namespace Golf.Client
         IKernel InitialiseNinject() {
             var kernel = new StandardKernel();
             kernel.Bind<IGameEngine>().To<GameEngine>();
-            kernel.Bind<IPhysicsEngine>().To<PhysicsEngine>();
+            kernel.Bind<IPhysicsEngine>().To<PhysicsEngine>().InSingletonScope();
             kernel.Bind<IEventManager>().To<EventManager>().InSingletonScope();
             kernel.Bind<IEventAggregator>().To<IEventManager>();
 

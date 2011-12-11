@@ -3,7 +3,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:Golf_Client_ViewModels="clr-namespace:Golf.Client.ViewModels" mc:Ignorable="d"
-             Canvas.Left="{Binding Path=Model.X}" Canvas.Top="{Binding Path=Model.Y}">
+             Canvas.Left="{Binding Path=Model.Body.Position.X}" Canvas.Top="{Binding Path=Model.Body.Position.Y}">
   <UserControl.DataContext>
     <Golf_Client_ViewModels:GolfBallViewModel />
   </UserControl.DataContext>

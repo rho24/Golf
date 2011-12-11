@@ -1,18 +1,27 @@
 using System;
+using Golf.Core.GameObjects;
 
 namespace Golf.Core.Events
 {
-    public interface IGameObjectCreated<out T> : IGameEvent
+    public interface IGameObjectCreated : IGameEvent
     {
-        T GameObject { get; }
+        GameObjectBase GameObject { get; }
     }
 
-    public class GameObjectCreated<T> : IGameObjectCreated<T>
+    public class GameObjectCreated<T> : IGameObjectCreated where T : GameObjectBase
     {
-        public T GameObject { get; private set; }
-
         public GameObjectCreated(T gameObject) {
             GameObject = gameObject;
         }
+
+        public T GameObject { get; private set; }
+
+        #region IGameObjectCreated Members
+
+        GameObjectBase IGameObjectCreated.GameObject {
+            get { return GameObject; }
+        }
+
+        #endregion
     }
 }

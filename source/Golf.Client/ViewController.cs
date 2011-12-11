@@ -18,8 +18,8 @@ namespace Golf.Client
 
         public ViewController(IGameEngine gameEngine) {
             _gameEngine = gameEngine;
-            _gameEngine.Events.OfType<TickEvent>().Subscribe(OnTick);
-            _gameEngine.Events.OfType<IGameObjectCreated<object>>().Subscribe(OnGameObjectCreated);
+            _gameEngine.Events.OfType<ShouldRender>().ObserveOnDispatcher().Subscribe(OnTick);
+            _gameEngine.Events.OfType<IGameObjectCreated>().ObserveOnDispatcher().Subscribe(OnGameObjectCreated);
             Views = new ObservableCollection<UserControl>();
             _viewModels = new List<ViewModelBase>();
         }
@@ -30,13 +30,13 @@ namespace Golf.Client
         
         #endregion
 
-        void OnTick(TickEvent e) {
+        void OnTick(ShouldRender e) {
             foreach (var model in _viewModels) {
                 model.UpdatePosition();
             }
         }
 
-        void OnGameObjectCreated(IGameObjectCreated<object> e) {
+        void OnGameObjectCreated(IGameObjectCreated e) {
             if (e is GameObjectCreated<GolfBall>) {
                 var ball = ((GameObjectCreated<GolfBall>) e).GameObject;
                 var view = new GolfBallView();

@@ -1,7 +1,11 @@
-﻿namespace Golf.Core.Physics
+﻿using System;
+using System.Collections.Generic;
+using Golf.Core.GameObjects;
+
+namespace Golf.Core.Physics
 {
     public interface IPhysicsEngine
     {
-        void Start();
+        void Tick(TimeSpan tickPeriod);
     }
 }

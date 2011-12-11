@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using Golf.Core;
 using Golf.Core.Events;
+using System.Reactive.Linq;
 
 namespace Golf.Client
 {
@@ -15,7 +16,7 @@ namespace Golf.Client
         }
 
         public void Initialize(IGameEngine gameEngine) {
-            gameEngine.Events.Subscribe(e => Events.Children.Add(new TextBlock {Text = e.ToString()}));
+            gameEngine.Events.Where(e => !(e is ShouldRender)).ObserveOnDispatcher().Subscribe(e => Events.Children.Add(new TextBlock {Text = e.ToString()}));
         }
     }
 }

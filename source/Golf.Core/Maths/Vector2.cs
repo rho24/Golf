@@ -44,6 +44,10 @@ namespace Golf.Core.Maths
             return new Vector2(v1.X - v2.X, v1.Y - v2.Y);
         }
 
+        public static Vector2 operator -(Vector2 v) {
+            return new Vector2(-v.X, -v.Y);
+        }
+
         public static Vector2 operator *(Vector2 v, double d) {
             return new Vector2(v.X*d, v.Y*d);
         }

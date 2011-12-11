@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Reactive.Linq;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using Golf.Client.Views;
 using Golf.Core;
 
@@ -25,22 +27,33 @@ namespace Golf.Client.ViewModels
         public void Initialize() {
             GameEngine.Initialize();
 
+            GameEngine.Events.OfType<ShotComplete>().ObserveOnDispatcher().Subscribe(e => AddShotControl());
+
             AddShotControl();
         }
 
         void AddShotControl() {
             if (_shotControlView != null) return;
-            _shotControlView = new ShotControlView();
-            _shotControlView.DataContext = new ShotControlViewModel {
-                                                                    PlayersBall = GameEngine.PlayersBall,
-                                                                    Hit = new ActionCommand(OnPlayerHit)
-                                                                };
-            SurfaceItems.Add(_shotControlView);
+            Dispatcher.CurrentDispatcher.Invoke((Action) (() => {
+                                                              _shotControlView = new ShotControlView();
+                                                              _shotControlView.DataContext = new ShotControlViewModel {
+                                                                                                                          PlayersBall
+                                                                                                                              =
+                                                                                                                              GameEngine
+                                                                                                                              .
+                                                                                                                              PlayersBall,
+                                                                                                                          Hit
+                                                                                                                              =
+                                                                                                                              new ActionCommand
+                                                                                                                              (OnPlayerHit)
+                                                                                                                      };
+                                                              SurfaceItems.Add(_shotControlView);
+                                                          }));
         }
 
         void OnPlayerHit() {
             if (_shotControlView == null) return;
-            var model = (ShotControlViewModel)_shotControlView.DataContext;
+            var model = (ShotControlViewModel) _shotControlView.DataContext;
             SurfaceItems.Remove(_shotControlView);
             _shotControlView = null;
             GameEngine.PlayShot(model.PowerX, model.PowerY);

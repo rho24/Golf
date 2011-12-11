@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events\ApplyImpulse.cs" />
+    <Compile Include="Events\ChangePosition.cs" />
     <Compile Include="Events\EventManager.cs" />
     <Compile Include="Events\GameObjectCreated.cs" />
     <Compile Include="Events\IEventManager.cs" />
@@ -53,13 +55,17 @@
     <Compile Include="Events\IMessageBus.cs" />
     <Compile Include="Events\ISubscriber.cs" />
     <Compile Include="Events\MessageBus.cs" />
-    <Compile Include="Events\TickEvent.cs" />
+    <Compile Include="Events\ShouldRender.cs" />
     <Compile Include="GameEngine.cs" />
+    <Compile Include="GameObjects\GameObjectBase.cs" />
     <Compile Include="GameObjects\GolfBall.cs" />
     <Compile Include="IGameEngine.cs" />
     <Compile Include="Maths\Vector2.cs" />
+    <Compile Include="Physics\DynamicBody.cs" />
+    <Compile Include="Physics\IDynamicBody.cs" />
     <Compile Include="Physics\IPhysicsEngine.cs" />
     <Compile Include="Physics\PhysicsEngine.cs" />
+    <Compile Include="Physics\PhysicsObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
