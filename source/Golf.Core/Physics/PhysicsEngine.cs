@@ -44,7 +44,6 @@ namespace Golf.Core.Physics
                 physicsObject.DynamicBody.Velocity += frictionInpulse;
             }
             _eventManager.Add(new ShouldRender());
-            _eventManager.TriggerAll();
         }
 
         #endregion
@@ -54,7 +53,6 @@ namespace Golf.Core.Physics
             message.GameObject.Body = dynamicBody;
             _physicsObjects.Add(new PhysicsObject(message.GameObject, dynamicBody));
             _eventManager.Add(new ShouldRender());
-            _eventManager.TriggerAll();
         }
 
         void ChangePosition(ChangePosition message) {
@@ -62,7 +60,6 @@ namespace Golf.Core.Physics
 
             physicsObject.DynamicBody.Position = message.Position;
             _eventManager.Add(new ShouldRender());
-            _eventManager.TriggerAll();
         }
 
         void ApplyImpulse(ApplyImpulse message) {
@@ -70,7 +67,6 @@ namespace Golf.Core.Physics
 
             physicsObject.DynamicBody.Velocity += message.Impulse;
             _eventManager.Add(new ShouldRender());
-            _eventManager.TriggerAll();
         }
     }
 }

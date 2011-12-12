@@ -36,14 +36,12 @@ namespace Golf.Core
 
             EventManager.Add(new GameObjectCreated<GolfBall>(PlayersBall));
             EventManager.Add(new ChangePosition(PlayersBall, new Vector2(100, 100)));
-            EventManager.TriggerAll();
         }
 
         public void PlayShot(double powerX, double powerY) {
             EventManager.Add(new ApplyImpulse(PlayersBall, new Vector2(powerX, powerY)));
-            EventManager.TriggerAll();
 
-            Task.Factory.StartNew(RunShotToCompletion).ContinueWith(t => { EventManager.Add(new ShotComplete()); EventManager.TriggerAll(); });
+            Task.Factory.StartNew(RunShotToCompletion).ContinueWith(t => EventManager.Add(new ShotComplete()));
         }
 
         void RunShotToCompletion() {
