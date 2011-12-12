@@ -8,18 +8,22 @@ namespace Golf.Core.Physics.Surfaces
 {
     public class SurfaceManager : ISurfaceManager
     {
-        public SurfaceManager(IObservable<IGameEvent> events) {
+        readonly IEventTriggerer _eventTriggerer;
+        readonly ICollection<ISurface> _surfaces = new List<ISurface>();
+
+        public SurfaceManager(IObservable<IGameEvent> events, IEventTriggerer eventTriggerer) {
+            _eventTriggerer = eventTriggerer;
+            events.OfType<RequestAddSurface>().Subscribe(AddSurface);
             events.OfType<PositionChanged>().Subscribe(PositionChanged);
         }
 
-        #region ISurfaceManager Members
-
-        public IEnumerable<Surface> Surfaces { get; set; }
-
-        #endregion
+        void AddSurface(RequestAddSurface e) {
+            _surfaces.Add(e.Surface);
+            _eventTriggerer.Trigger(new SurfaceAdded(e.Surface));
+        }
 
         void PositionChanged(PositionChanged e) {
-            var surface = Surfaces.Where(s => s.BoundingBox.Contains(e.GameObject.Body.Position)).Single();
+            var surface = _surfaces.Where(s => s.BoundingBox.Contains(e.GameObject.Body.Position)).Single();
 
             e.GameObject.Surface = surface;
         }

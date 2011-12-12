@@ -27,10 +27,13 @@ namespace Golf.Core
         public GolfBall PlayersBall { get; private set; }
 
         public void Initialize() {
-            _surfaceManager.Surfaces = new[] {
-                                                 new Surface(
-                                                     new RectangleBoundingBox(new Vector2(20, 20), new Vector2(400, 400)), 150)
-                                             };
+            _eventTriggerer.Trigger(new RequestAddSurface(
+                new RectangleSurface(
+                              new RectangleBoundingBox(
+                                  new Vector2(20, 20),
+                                  new Vector2(400, 400)),
+                              150)));
+
             PlayersBall = new GolfBall {
                                            Mass = 1.0
                                        };

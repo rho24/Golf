@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Windows;
 using Golf.Client.ViewModels;
 using Golf.Core;
@@ -16,6 +17,8 @@ namespace Golf.Client
     public partial class App
     {
         protected override void OnStartup(StartupEventArgs e) {
+            FixStartupUri();
+
             var kernel = InitialiseNinject();
             var mainWindow = kernel.Get<MainWindow>();
             var viewModel = kernel.Get<MainWindowViewModel>();
@@ -41,6 +44,15 @@ namespace Golf.Client
             kernel.Bind<IViewController>().To<ViewController>();
 
             return kernel;
+        }
+
+        // Dangit blend! Stop inserting a stupid StartupUri    
+        void FixStartupUri() {
+            var type = typeof (Application);
+            var startupUri = type.GetField("_startupUri", BindingFlags.Public
+                                                          | BindingFlags.NonPublic
+                                                          | BindingFlags.Instance);
+            startupUri.SetValue(this, null);
         }
     }
 }

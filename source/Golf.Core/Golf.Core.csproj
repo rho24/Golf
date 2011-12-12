@@ -56,7 +56,9 @@
     <Compile Include="Events\IMessageBus.cs" />
     <Compile Include="Events\ISubscriber.cs" />
     <Compile Include="Events\MessageBus.cs" />
+    <Compile Include="Events\RequestAddSurface.cs" />
     <Compile Include="Events\ShotComplete.cs" />
+    <Compile Include="Events\SurfaceAdded.cs" />
     <Compile Include="Events\Tick.cs" />
     <Compile Include="GameEngine.cs" />
     <Compile Include="GameObjects\GameObjectBase.cs" />
@@ -70,8 +72,8 @@
     <Compile Include="Physics\IPhysicsEngine.cs" />
     <Compile Include="Physics\PhysicsEngine.cs" />
     <Compile Include="Physics\PhysicsObject.cs" />
+    <Compile Include="Physics\Surfaces\ISurface.cs" />
     <Compile Include="Physics\Surfaces\ISurfaceManager.cs" />
-    <Compile Include="Physics\Surfaces\Surface.cs" />
     <Compile Include="Physics\Surfaces\SurfaceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

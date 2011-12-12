@@ -8,7 +8,7 @@
     <ItemsControl ItemsSource="{Binding Path=SurfaceItems}">
       <ItemsControl.ItemsPanel>
         <ItemsPanelTemplate>
-          <Canvas x:Name="HoleSurface" Background="Green"></Canvas>
+          <Canvas x:Name="HoleSurface" Background="Gray"></Canvas>
         </ItemsPanelTemplate>
       </ItemsControl.ItemsPanel>
     </ItemsControl>

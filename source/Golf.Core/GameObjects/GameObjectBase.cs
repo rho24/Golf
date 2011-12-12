@@ -8,6 +8,6 @@ namespace Golf.Core.GameObjects
     {
         public IDynamicBody Body { get; set; }
         public double Mass { get; set; }
-        public Surface Surface { get; set; }
+        public ISurface Surface { get; set; }
     }
 }
