@@ -5,15 +5,18 @@ using System.Windows.Controls;
 using System.Windows.Threading;
 using Golf.Client.Views;
 using Golf.Core;
+using Golf.Core.Events;
 
 namespace Golf.Client.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        readonly IObservable<IGameEvent> _events;
         readonly IViewController _viewController;
         ShotControlView _shotControlView;
 
-        public MainWindowViewModel(IGameEngine gameEngine, IViewController viewController) {
+        public MainWindowViewModel(IGameEngine gameEngine, IObservable<IGameEvent> events, IViewController viewController) {
+            _events = events;
             _viewController = viewController;
             GameEngine = gameEngine;
         }
@@ -27,7 +30,7 @@ namespace Golf.Client.ViewModels
         public void Initialize() {
             GameEngine.Initialize();
 
-            GameEngine.Events.OfType<ShotComplete>().ObserveOnDispatcher().Subscribe(e => AddShotControl());
+            _events.OfType<ShotComplete>().ObserveOnDispatcher().Subscribe(e => AddShotControl());
 
             AddShotControl();
         }

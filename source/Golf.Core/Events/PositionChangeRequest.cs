@@ -3,9 +3,9 @@ using Golf.Core.Maths;
 
 namespace Golf.Core.Events
 {
-    public class ChangePosition : IGameEvent
+    public class PositionChangeRequest : IGameEvent
     {
-        public ChangePosition(GameObjectBase gameObject, Vector2 position) {
+        public PositionChangeRequest(GameObjectBase gameObject, Vector2 position) {
             GameObject = gameObject;
             Position = position;
         }

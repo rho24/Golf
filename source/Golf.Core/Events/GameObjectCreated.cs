@@ -3,22 +3,22 @@ using Golf.Core.GameObjects;
 
 namespace Golf.Core.Events
 {
-    public interface IGameObjectCreated : IGameEvent
+    public interface IAddGameObjectRequest : IGameEvent
     {
         GameObjectBase GameObject { get; }
     }
 
-    public class GameObjectCreated<T> : IGameObjectCreated where T : GameObjectBase
+    public class AddGameObjectRequest<T> : IAddGameObjectRequest where T : GameObjectBase
     {
-        public GameObjectCreated(T gameObject) {
+        public AddGameObjectRequest(T gameObject) {
             GameObject = gameObject;
         }
 
         public T GameObject { get; private set; }
 
-        #region IGameObjectCreated Members
+        #region IAddGameObjectRequest Members
 
-        GameObjectBase IGameObjectCreated.GameObject {
+        GameObjectBase IAddGameObjectRequest.GameObject {
             get { return GameObject; }
         }
 

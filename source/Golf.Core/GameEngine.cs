@@ -1,5 +1,4 @@
 using System;
-using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Golf.Core.Events;
@@ -11,20 +10,15 @@ namespace Golf.Core
 {
     public class GameEngine : IGameEngine
     {
+        readonly IEventTriggerer _eventTriggerer;
         readonly IPhysicsEngine _physicsEngine;
 
-        public GameEngine(IPhysicsEngine physicsEngine, IEventManager eventManager) {
+        public GameEngine(IPhysicsEngine physicsEngine, IEventTriggerer eventTriggerer) {
             _physicsEngine = physicsEngine;
-            EventManager = eventManager;
+            _eventTriggerer = eventTriggerer;
         }
-
-        public IEventManager EventManager { get; private set; }
 
         #region IGameEngine Members
-
-        public IObservable<IGameEvent> Events {
-            get { return EventManager.Events; }
-        }
 
         public GolfBall PlayersBall { get; private set; }
 
@@ -34,27 +28,24 @@ namespace Golf.Core
                                            Friction = 150.0
                                        };
 
-            EventManager.Add(new GameObjectCreated<GolfBall>(PlayersBall));
-            EventManager.Add(new ChangePosition(PlayersBall, new Vector2(100, 100)));
+            _eventTriggerer.Trigger(new AddGameObjectRequest<GolfBall>(PlayersBall));
+            _eventTriggerer.Trigger(new PositionChangeRequest(PlayersBall, new Vector2(100, 100)));
         }
 
         public void PlayShot(double powerX, double powerY) {
-            EventManager.Add(new ApplyImpulse(PlayersBall, new Vector2(powerX, powerY)));
+            _eventTriggerer.Trigger(new ApplyImpulse(PlayersBall, new Vector2(powerX, powerY)));
 
-            Task.Factory.StartNew(RunShotToCompletion).ContinueWith(t => EventManager.Add(new ShotComplete()));
+            Task.Factory.StartNew(RunShotToCompletion).ContinueWith(t => _eventTriggerer.Trigger(new ShotComplete()));
         }
 
+        #endregion
+
         void RunShotToCompletion() {
-            while(PlayersBall.Body.Velocity.Length > 0.000001) {
+            while (PlayersBall.Body.Velocity.Length > 0.000001) {
                 _physicsEngine.Tick(TimeSpan.FromMilliseconds(10));
 
                 Thread.Sleep(10);
             }
         }
-
-        #endregion
     }
-
-    public class ShotComplete : IGameEvent
-    {}
 }

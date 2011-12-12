@@ -8,23 +8,23 @@ namespace Golf.Core.Physics
 {
     public class PhysicsEngine : IPhysicsEngine
     {
-        readonly IEventManager _eventManager;
+        readonly IEventTriggerer _eventTriggerer;
 
         readonly ICollection<PhysicsObject> _physicsObjects = new List<PhysicsObject>();
 
-        public PhysicsEngine(IEventManager eventManager) {
-            _eventManager = eventManager;
+        public PhysicsEngine(IObservable<IGameEvent> events, IEventTriggerer eventTriggerer) {
+            _eventTriggerer = eventTriggerer;
 
-            _eventManager.Events
-                .OfType<IGameObjectCreated>()
-                .Subscribe(GameObjectCreated);
+            events
+                .OfType<IAddGameObjectRequest>()
+                .Subscribe(AddGameObject);
 
 
-            _eventManager.Events
-                .OfType<ChangePosition>()
+            events
+                .OfType<PositionChangeRequest>()
                 .Subscribe(ChangePosition);
 
-            _eventManager.Events
+            events
                 .OfType<ApplyImpulse>()
                 .Subscribe(ApplyImpulse);
         }
@@ -38,35 +38,36 @@ namespace Golf.Core.Physics
 
                 var frictionInpulse = (-physicsObject.DynamicBody.Velocity.Normal)
                                       *
-                                      Math.Min(physicsObject.GameObject.Friction * tickPeriod.TotalSeconds,
+                                      Math.Min(physicsObject.GameObject.Friction*tickPeriod.TotalSeconds,
                                                physicsObject.DynamicBody.Velocity.Length);
 
                 physicsObject.DynamicBody.Velocity += frictionInpulse;
             }
-            _eventManager.Add(new ShouldRender());
+            _eventTriggerer.Trigger(new ShouldRender());
         }
 
         #endregion
 
-        void GameObjectCreated(IGameObjectCreated message) {
+        void AddGameObject(IAddGameObjectRequest message) {
             var dynamicBody = new DynamicBody();
             message.GameObject.Body = dynamicBody;
             _physicsObjects.Add(new PhysicsObject(message.GameObject, dynamicBody));
-            _eventManager.Add(new ShouldRender());
+            _eventTriggerer.Trigger(new ShouldRender());
         }
 
-        void ChangePosition(ChangePosition message) {
+        void ChangePosition(PositionChangeRequest message) {
             var physicsObject = _physicsObjects.Where(p => p.GameObject == message.GameObject).Single();
 
             physicsObject.DynamicBody.Position = message.Position;
-            _eventManager.Add(new ShouldRender());
+            _eventTriggerer.Trigger(new PositionChanged(physicsObject.GameObject));
+            _eventTriggerer.Trigger(new ShouldRender());
         }
 
         void ApplyImpulse(ApplyImpulse message) {
             var physicsObject = _physicsObjects.Where(p => p.GameObject == message.GameObject).Single();
 
             physicsObject.DynamicBody.Velocity += message.Impulse;
-            _eventManager.Add(new ShouldRender());
+            _eventTriggerer.Trigger(new ShouldRender());
         }
     }
 }

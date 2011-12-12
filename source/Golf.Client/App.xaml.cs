@@ -20,7 +20,7 @@ namespace Golf.Client
             var viewModel = kernel.Get<MainWindowViewModel>();
             mainWindow.DataContext = viewModel;
             viewModel.Initialize();
-            mainWindow.Events.Initialize(viewModel.GameEngine);
+            mainWindow.Events.Initialize(kernel.Get<IObservable<IGameEvent>>());
 
             mainWindow.Show();
 
@@ -29,10 +29,12 @@ namespace Golf.Client
 
         IKernel InitialiseNinject() {
             var kernel = new StandardKernel();
-            kernel.Bind<IGameEngine>().To<GameEngine>();
-            kernel.Bind<IPhysicsEngine>().To<PhysicsEngine>().InSingletonScope();
-            kernel.Bind<IEventManager>().To<EventManager>().InSingletonScope();
-            kernel.Bind<IEventAggregator>().To<IEventManager>();
+            kernel.Bind<IGameEngine>().To<GameEngine>().InSingletonScope();
+
+            kernel.Bind<EventManager>().ToSelf().InSingletonScope();
+            kernel.Bind<IEventTriggerer>().ToMethod(c => c.Kernel.Get<EventManager>());
+            kernel.Bind<IPhysicsEngine>().To<PhysicsEngine>();
+            kernel.Bind<IObservable<IGameEvent>>().ToMethod(c => c.Kernel.Get<EventManager>().Events);
 
             kernel.Bind<IViewController>().To<ViewController>();
 
