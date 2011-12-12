@@ -1,17 +1,13 @@
 using System;
 using Golf.Core.Physics;
+using Golf.Core.Physics.Surfaces;
 
 namespace Golf.Core.GameObjects
 {
     public abstract class GameObjectBase
     {
-        IDynamicBody _body;
-        public IDynamicBody Body {
-            get { return _body; }
-            set { _body = value; }
-        }
-
+        public IDynamicBody Body { get; set; }
         public double Mass { get; set; }
-        public double Friction { get; set; }
+        public Surface Surface { get; set; }
     }
 }

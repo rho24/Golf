@@ -15,8 +15,8 @@ namespace Golf.Client
         readonly ICollection<ViewModelBase> _viewModels;
 
         public ViewController(IObservable<IGameEvent> events) {
-            events.OfType<ShouldRender>().ObserveOnDispatcher().Subscribe(OnTick);
-            events.OfType<IAddGameObjectRequest>().ObserveOnDispatcher().Subscribe(OnGameObjectCreated);
+            events.Where(e => e is Tick || e is PositionChanged).ObserveOnDispatcher().Subscribe(e => UpdatePositions());
+            events.OfType<GameObjectAdded>().ObserveOnDispatcher().Subscribe(OnGameObjectAdded);
             Views = new ObservableCollection<UserControl>();
             _viewModels = new List<ViewModelBase>();
         }
@@ -27,15 +27,15 @@ namespace Golf.Client
 
         #endregion
 
-        void OnTick(ShouldRender e) {
+        void UpdatePositions() {
             foreach (var model in _viewModels) {
                 model.UpdatePosition();
             }
         }
 
-        void OnGameObjectCreated(IAddGameObjectRequest e) {
-            if (e is AddGameObjectRequest<GolfBall>) {
-                var ball = ((AddGameObjectRequest<GolfBall>) e).GameObject;
+        void OnGameObjectAdded(GameObjectAdded e) {
+            if (e.GameObject is GolfBall) {
+                var ball = (GolfBall) e.GameObject;
                 var view = new GolfBallView();
                 var viewModel = new GolfBallViewModel {Model = ball};
                 view.DataContext = viewModel;

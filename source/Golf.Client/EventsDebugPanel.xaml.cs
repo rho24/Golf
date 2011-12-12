@@ -15,7 +15,7 @@ namespace Golf.Client
         }
 
         public void Initialize(IObservable<IGameEvent> events) {
-            events.Where(e => !(e is ShouldRender)).ObserveOnDispatcher().Subscribe(
+            events.Where(e => !(e is Tick)).ObserveOnDispatcher().Subscribe(
                 e => Events.Children.Add(new TextBlock {Text = e.ToString()}));
         }
     }

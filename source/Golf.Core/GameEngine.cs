@@ -5,6 +5,8 @@ using Golf.Core.Events;
 using Golf.Core.GameObjects;
 using Golf.Core.Maths;
 using Golf.Core.Physics;
+using Golf.Core.Physics.BoundingBoxes;
+using Golf.Core.Physics.Surfaces;
 
 namespace Golf.Core
 {
@@ -12,9 +14,11 @@ namespace Golf.Core
     {
         readonly IEventTriggerer _eventTriggerer;
         readonly IPhysicsEngine _physicsEngine;
+        readonly ISurfaceManager _surfaceManager;
 
-        public GameEngine(IPhysicsEngine physicsEngine, IEventTriggerer eventTriggerer) {
+        public GameEngine(IPhysicsEngine physicsEngine, ISurfaceManager surfaceManager, IEventTriggerer eventTriggerer) {
             _physicsEngine = physicsEngine;
+            _surfaceManager = surfaceManager;
             _eventTriggerer = eventTriggerer;
         }
 
@@ -23,13 +27,15 @@ namespace Golf.Core
         public GolfBall PlayersBall { get; private set; }
 
         public void Initialize() {
+            _surfaceManager.Surfaces = new[] {
+                                                 new Surface(
+                                                     new RectangleBoundingBox(new Vector2(20, 20), new Vector2(400, 400)), 150)
+                                             };
             PlayersBall = new GolfBall {
-                                           Mass = 1.0,
-                                           Friction = 150.0
+                                           Mass = 1.0
                                        };
 
-            _eventTriggerer.Trigger(new AddGameObjectRequest<GolfBall>(PlayersBall));
-            _eventTriggerer.Trigger(new PositionChangeRequest(PlayersBall, new Vector2(100, 100)));
+            _eventTriggerer.Trigger(new AddGameObjectRequest(PlayersBall, new Vector2(100, 100)));
         }
 
         public void PlayShot(double powerX, double powerY) {
