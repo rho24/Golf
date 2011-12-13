@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventManager.cs" />
+    <Compile Include="Events\AddBarrierRequest.cs" />
     <Compile Include="Events\AddForceRequest.cs" />
     <Compile Include="Events\ApplyImpulseRequest.cs" />
     <Compile Include="Events\GameObjectAdded.cs" />
@@ -64,8 +65,14 @@
     <Compile Include="IGameEngine.cs" />
     <Compile Include="IGameEvent.cs" />
     <Compile Include="Maths\Vector2.cs" />
+    <Compile Include="Physics\Barriers\BarrierManager.cs" />
+    <Compile Include="Physics\Barriers\IBarrier.cs" />
+    <Compile Include="Physics\Barriers\IBarriers.cs" />
+    <Compile Include="Physics\Barriers\LineBarrier.cs" />
     <Compile Include="Physics\BoundingBoxes\IBoundingBox.cs" />
     <Compile Include="Physics\BoundingBoxes\RectangleBoundingBox.cs" />
+    <Compile Include="Physics\Collisions\ICollision.cs" />
+    <Compile Include="Physics\Collisions\SingleBallCollision.cs" />
     <Compile Include="Physics\DynamicBody.cs" />
     <Compile Include="Physics\Forces\IForce.cs" />
     <Compile Include="Physics\Forces\IResistiveForce.cs" />

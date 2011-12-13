@@ -4,30 +4,29 @@ using System.Linq;
 using System.Reactive.Linq;
 using Golf.Core.Events;
 using Golf.Core.Maths;
+using Golf.Core.Physics.Barriers;
 using Golf.Core.Physics.Forces;
 
 namespace Golf.Core.Physics
 {
     public class PhysicsEngine : IPhysicsEngine
     {
+        readonly IBarriers _barriers;
         readonly IEventTriggerer _eventTriggerer;
 
         readonly ICollection<PhysicsObject> _physicsObjects = new List<PhysicsObject>();
 
-        public PhysicsEngine(IObservable<IGameEvent> events, IEventTriggerer eventTriggerer) {
+        public PhysicsEngine(IObservable<IGameEvent> events, IEventTriggerer eventTriggerer, IBarriers barriers) {
             _eventTriggerer = eventTriggerer;
+            _barriers = barriers;
 
-            events
-                .OfType<AddGameObjectRequest>()
+            events.OfType<AddGameObjectRequest>()
                 .Subscribe(AddGameObject);
 
-
-            events
-                .OfType<PositionChangeRequest>()
+            events.OfType<PositionChangeRequest>()
                 .Subscribe(ChangePosition);
 
-            events
-                .OfType<ApplyImpulseRequest>()
+            events.OfType<ApplyImpulseRequest>()
                 .Subscribe(ApplyImpulse);
 
             events.OfType<AddForceRequest>()
@@ -39,9 +38,41 @@ namespace Golf.Core.Physics
 
         #region IPhysicsEngine Members
 
-        public bool IsInRest { get { return _physicsObjects.All(p => p.Body.IsInRest); } }
+        public bool IsInRest {
+            get { return _physicsObjects.All(p => p.Body.IsInRest); }
+        }
 
         public void Tick(TimeSpan tickPeriod) {
+            var collision = (from o in _physicsObjects
+                             from b in _barriers
+                             let c = b.CalculateCollision(o.GameObject, tickPeriod)
+                             where c != null
+                             select c).FirstOrDefault();
+
+            if (collision != null) {
+                UpdatePositions(collision.CollisionTime);
+                collision.Apply(_eventTriggerer);
+                Tick(tickPeriod - collision.CollisionTime);
+                return;
+            }
+
+            UpdatePositions(tickPeriod);
+
+            UpdateVelocities(tickPeriod);
+
+            _eventTriggerer.Trigger(new Tick());
+        }
+
+        #endregion
+
+        void UpdatePositions(TimeSpan tickPeriod) {
+            foreach (var physicsObject in _physicsObjects) {
+                physicsObject.Body.Position +=
+                    physicsObject.Body.Velocity*tickPeriod.TotalSeconds;
+            }
+        }
+
+        void UpdateVelocities(TimeSpan tickPeriod) {
             foreach (var physicsObject in _physicsObjects) {
                 physicsObject.Body.Position +=
                     physicsObject.Body.Velocity*tickPeriod.TotalSeconds;
@@ -50,16 +81,14 @@ namespace Golf.Core.Physics
                 physicsObject.Body.Velocity = velocityResult.Velocity;
                 physicsObject.Body.IsInRest = velocityResult.IsInRest;
             }
-            _eventTriggerer.Trigger(new Tick());
         }
 
-        #endregion
-
-        VelocityResult CalculateVelocity(DynamicBody body, TimeSpan tickPeriod) {
+        VelocityResult CalculateVelocity
+            (DynamicBody body, TimeSpan tickPeriod) {
             var impulse = body.Forces.Aggregate(Vector2.Zero,
                                                 (current, force) =>
                                                 current + force.CalculateForce(body))
-                          *tickPeriod.TotalSeconds;
+                          *tickPeriod.TotalSeconds; //TODO: requires mass;
 
             var velocityBeforeResistance = body.Velocity + impulse;
 
@@ -78,7 +107,8 @@ namespace Golf.Core.Physics
             return new VelocityResult(velocity, isInRest);
         }
 
-        double AddStickingToZero(double v1, double v2) {
+        double AddStickingToZero
+            (double v1, double v2) {
             var sum = v1 + v2;
 
             if (Math.Sign(v1) != Math.Sign(sum))
@@ -87,7 +117,9 @@ namespace Golf.Core.Physics
             return sum;
         }
 
-        void AddGameObject(AddGameObjectRequest message) {
+        void AddGameObject
+            (AddGameObjectRequest
+                 message) {
             var dynamicBody = new DynamicBody {Position = message.Position};
             message.GameObject.Body = dynamicBody;
             _physicsObjects.Add(new PhysicsObject(message.GameObject, dynamicBody));
@@ -95,20 +127,26 @@ namespace Golf.Core.Physics
             _eventTriggerer.Trigger(new PositionChanged(message.GameObject));
         }
 
-        void ChangePosition(PositionChangeRequest message) {
+        void ChangePosition
+            (PositionChangeRequest
+                 message) {
             var physicsObject = _physicsObjects.Where(p => p.GameObject == message.GameObject).Single();
 
             physicsObject.Body.Position = message.Position;
             _eventTriggerer.Trigger(new PositionChanged(message.GameObject));
         }
 
-        void ApplyImpulse(ApplyImpulseRequest message) {
+        void ApplyImpulse
+            (ApplyImpulseRequest
+                 message) {
             var physicsObject = _physicsObjects.Where(p => p.GameObject == message.GameObject).Single();
 
-            physicsObject.Body.Velocity += message.Impulse;
+            physicsObject.Body.Velocity += message.Impulse; //TODO: requires mass;
         }
 
-        void AddForce(AddForceRequest e) {
+        void AddForce
+            (AddForceRequest
+                 e) {
             var physicsObject = _physicsObjects.Where(p => p.GameObject == e.GameObject).Single();
 
             if (e.Force is IResistiveForce)
@@ -117,7 +155,9 @@ namespace Golf.Core.Physics
                 physicsObject.Body.Forces.Add(e.Force);
         }
 
-        void RemoveForce(RemoveForceRequest e) {
+        void RemoveForce
+            (RemoveForceRequest
+                 e) {
             var physicsObject = _physicsObjects.Where(p => p.GameObject == e.GameObject).Single();
 
             if (e.Force is IResistiveForce)

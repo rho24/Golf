@@ -5,6 +5,7 @@ using Golf.Core.Events;
 using Golf.Core.GameObjects;
 using Golf.Core.Maths;
 using Golf.Core.Physics;
+using Golf.Core.Physics.Barriers;
 using Golf.Core.Physics.BoundingBoxes;
 using Golf.Core.Physics.Surfaces;
 
@@ -33,6 +34,10 @@ namespace Golf.Core
                                                 new Vector2(20, 20),
                                                 new Vector2(800, 700)),
                                             new ConstantResistiveForce(150))));
+
+            _eventTriggerer.Trigger(new AddBarrierRequest(new LineBarrier(
+                new Vector2(400, 40),
+                new Vector2(400, 680))));
 
             PlayersBall = new GolfBall {
                                            Mass = 1.0

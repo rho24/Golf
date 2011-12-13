@@ -91,5 +91,17 @@ namespace Golf.Core.Maths
         public static Vector2 operator /(double d, Vector2 v) {
             return v/d;
         }
+
+        public Vector2 Perpendicular() {
+            return new Vector2(-Y, X).Normal;
+        }
+
+        public double Dot(Vector2 v) {
+            return X*v.X + Y*v.Y;
+        }
+
+        public double Cross(Vector2 v) {
+            return X*v.Y - Y*v.X;
+        }
     }
 }
