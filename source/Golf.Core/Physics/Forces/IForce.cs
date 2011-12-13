@@ -5,6 +5,6 @@ namespace Golf.Core.Physics.Forces
 {
     public interface IForce
     {
-        Vector2 CalculateImpulse(DynamicBody body, TimeSpan tickPeriod);
+        Vector2 CalculateForce(DynamicBody body);
     }
 }

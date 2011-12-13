@@ -31,9 +31,9 @@ namespace Golf.Core.Physics.Surfaces
 
 
             if (previousSurface != null)
-                _eventTriggerer.Trigger(new RequestRemoveForce(e.GameObject, previousSurface.FrictionForce));
+                _eventTriggerer.Trigger(new RemoveForceRequest(e.GameObject, previousSurface.FrictionForce));
 
-            _eventTriggerer.Trigger(new RequestAddForce(e.GameObject, surface.FrictionForce));
+            _eventTriggerer.Trigger(new AddForceRequest(e.GameObject, surface.FrictionForce));
         }
     }
 }

@@ -46,12 +46,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventManager.cs" />
+    <Compile Include="Events\AddForceRequest.cs" />
     <Compile Include="Events\ApplyImpulseRequest.cs" />
     <Compile Include="Events\GameObjectAdded.cs" />
     <Compile Include="Events\PositionChanged.cs" />
     <Compile Include="Events\PositionChangeRequest.cs" />
     <Compile Include="Events\AddGameObjectRequest.cs" />
     <Compile Include="Events\AddSurfaceRequest.cs" />
+    <Compile Include="Events\RemoveForceRequest.cs" />
     <Compile Include="Events\ShotComplete.cs" />
     <Compile Include="Events\SurfaceAdded.cs" />
     <Compile Include="Events\Tick.cs" />
@@ -66,8 +68,8 @@
     <Compile Include="Physics\DynamicBody.cs" />
     <Compile Include="Physics\Forces\IForce.cs" />
     <Compile Include="Physics\Forces\IResistiveForce.cs" />
-    <Compile Include="Physics\Forces\RequestAddForce.cs" />
-    <Compile Include="Physics\Forces\RequestRemoveForce.cs" />
+    <Compile Include="Physics\Forces\LinearForce.cs" />
+    <Compile Include="Physics\Forces\MagnetForce.cs" />
     <Compile Include="Physics\IBoundingBox.cs" />
     <Compile Include="Physics\IDynamicBody.cs" />
     <Compile Include="Physics\IPhysicsEngine.cs" />
@@ -75,6 +77,7 @@
     <Compile Include="Physics\PhysicsObject.cs" />
     <Compile Include="Physics\Surfaces\ISurface.cs" />
     <Compile Include="Physics\Surfaces\ISurfaceManager.cs" />
+    <Compile Include="Physics\Surfaces\RectangleSurface.cs" />
     <Compile Include="Physics\Surfaces\SurfaceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

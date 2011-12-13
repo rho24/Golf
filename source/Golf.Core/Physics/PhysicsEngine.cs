@@ -30,10 +30,10 @@ namespace Golf.Core.Physics
                 .OfType<ApplyImpulseRequest>()
                 .Subscribe(ApplyImpulse);
 
-            events.OfType<RequestAddForce>()
+            events.OfType<AddForceRequest>()
                 .Subscribe(AddForce);
 
-            events.OfType<RequestRemoveForce>()
+            events.OfType<RemoveForceRequest>()
                 .Subscribe(RemoveForce);
         }
 
@@ -55,15 +55,16 @@ namespace Golf.Core.Physics
         Vector2 CalculateVelocity(DynamicBody body, TimeSpan tickPeriod) {
             var impulse = body.Forces.Aggregate(Vector2.Zero,
                                                 (current, force) =>
-                                                current + force.CalculateImpulse(body, tickPeriod));
+                                                current + force.CalculateForce(body))
+                                                * tickPeriod.TotalSeconds;
 
             var velocityBeforeResistance = body.Velocity + impulse;
 
             var resistiveImpulse = body.ResistiveForces.Aggregate(Vector2.Zero,
                                                                   (c, f) =>
                                                                   c +
-                                                                  f.CalculateImpulse(body,
-                                                                                     tickPeriod));
+                                                                  f.CalculateForce(body))
+                                                                  * tickPeriod.TotalSeconds;
 
             return new Vector2(
                 AddStickingToZero(velocityBeforeResistance.X, resistiveImpulse.X),
@@ -100,7 +101,7 @@ namespace Golf.Core.Physics
             physicsObject.DynamicBody.Velocity += message.Impulse;
         }
 
-        void AddForce(RequestAddForce e) {
+        void AddForce(AddForceRequest e) {
             var physicsObject = _physicsObjects.Where(p => p.GameObject == e.GameObject).Single();
 
             if (e.Force is IResistiveForce)
@@ -109,7 +110,7 @@ namespace Golf.Core.Physics
                 physicsObject.DynamicBody.Forces.Add(e.Force);
         }
 
-        void RemoveForce(RequestRemoveForce e) {
+        void RemoveForce(RemoveForceRequest e) {
             var physicsObject = _physicsObjects.Where(p => p.GameObject == e.GameObject).Single();
 
             if (e.Force is IResistiveForce)

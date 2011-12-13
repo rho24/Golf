@@ -6,6 +6,7 @@ using Golf.Core.GameObjects;
 using Golf.Core.Maths;
 using Golf.Core.Physics;
 using Golf.Core.Physics.BoundingBoxes;
+using Golf.Core.Physics.Forces;
 using Golf.Core.Physics.Surfaces;
 
 namespace Golf.Core
@@ -28,17 +29,18 @@ namespace Golf.Core
 
         public void Initialize() {
             _eventTriggerer.Trigger(new AddSurfaceRequest(
-                new RectangleSurface(
-                              new RectangleBoundingBox(
-                                  new Vector2(20, 20),
-                                  new Vector2(400, 400)),
-                              new ConstantResistiveForce(150))));
+                                        new RectangleSurface(
+                                            new RectangleBoundingBox(
+                                                new Vector2(20, 20),
+                                                new Vector2(800, 700)),
+                                            new ConstantResistiveForce(150))));
 
             PlayersBall = new GolfBall {
                                            Mass = 1.0
                                        };
 
             _eventTriggerer.Trigger(new AddGameObjectRequest(PlayersBall, new Vector2(100, 100)));
+            _eventTriggerer.Trigger(new AddForceRequest(PlayersBall, new MagnetForce(new Vector2(400,350), 100000)));
         }
 
         public void PlayShot(double powerX, double powerY) {

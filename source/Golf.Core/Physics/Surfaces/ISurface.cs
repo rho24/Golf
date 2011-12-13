@@ -1,6 +1,5 @@
 using System;
 using Golf.Core.Maths;
-using Golf.Core.Physics.BoundingBoxes;
 using Golf.Core.Physics.Forces;
 
 namespace Golf.Core.Physics.Surfaces
@@ -19,35 +18,11 @@ namespace Golf.Core.Physics.Surfaces
             _friction = friction;
         }
 
-        #region IForce Members
+        #region IResistiveForce Members
 
-        public Vector2 CalculateImpulse(DynamicBody body, TimeSpan tickPeriod) {
-            return (-body.Velocity.Normal)
-                   *
-                   _friction*tickPeriod.TotalSeconds;
+        public Vector2 CalculateForce(DynamicBody body) {
+            return -body.Velocity.Normal*_friction;
         }
-
-        #endregion
-    }
-
-    public class RectangleSurface : ISurface
-    {
-        public RectangleSurface(RectangleBoundingBox boundingBox, ConstantResistiveForce frictionForce) {
-            BoundingBox = boundingBox;
-            FrictionForce = frictionForce;
-        }
-
-        public RectangleBoundingBox BoundingBox { get; private set; }
-
-        public double Friction { get; set; }
-
-        #region ISurface Members
-
-        IBoundingBox ISurface.BoundingBox {
-            get { return BoundingBox; }
-        }
-
-        public ConstantResistiveForce FrictionForce { get; private set; }
 
         #endregion
     }
