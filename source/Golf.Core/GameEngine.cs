@@ -6,7 +6,6 @@ using Golf.Core.GameObjects;
 using Golf.Core.Maths;
 using Golf.Core.Physics;
 using Golf.Core.Physics.BoundingBoxes;
-using Golf.Core.Physics.Forces;
 using Golf.Core.Physics.Surfaces;
 
 namespace Golf.Core
@@ -40,7 +39,7 @@ namespace Golf.Core
                                        };
 
             _eventTriggerer.Trigger(new AddGameObjectRequest(PlayersBall, new Vector2(100, 100)));
-            _eventTriggerer.Trigger(new AddForceRequest(PlayersBall, new MagnetForce(new Vector2(400, 350), 100000)));
+            //_eventTriggerer.Trigger(new AddForceRequest(PlayersBall, new MagnetForce(new Vector2(400, 350), 100000)));
         }
 
         public void PlayShot(double powerX, double powerY) {
@@ -52,11 +51,11 @@ namespace Golf.Core
         #endregion
 
         void RunShotToCompletion() {
-            while (!_physicsEngine.IsInRest) {
+            do {
                 _physicsEngine.Tick(TimeSpan.FromMilliseconds(10));
 
                 Thread.Sleep(10);
-            }
+            } while (!_physicsEngine.IsInRest);
         }
     }
 }

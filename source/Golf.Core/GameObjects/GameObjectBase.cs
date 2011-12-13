@@ -6,7 +6,7 @@ namespace Golf.Core.GameObjects
 {
     public abstract class GameObjectBase
     {
-        public IDynamicBody Body { get; set; }
+        public IBody Body { get; set; }
         public double Mass { get; set; }
         public ISurface Surface { get; set; }
     }

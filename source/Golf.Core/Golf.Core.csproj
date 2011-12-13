@@ -64,14 +64,14 @@
     <Compile Include="IGameEngine.cs" />
     <Compile Include="IGameEvent.cs" />
     <Compile Include="Maths\Vector2.cs" />
+    <Compile Include="Physics\BoundingBoxes\IBoundingBox.cs" />
     <Compile Include="Physics\BoundingBoxes\RectangleBoundingBox.cs" />
     <Compile Include="Physics\DynamicBody.cs" />
     <Compile Include="Physics\Forces\IForce.cs" />
     <Compile Include="Physics\Forces\IResistiveForce.cs" />
     <Compile Include="Physics\Forces\LinearForce.cs" />
     <Compile Include="Physics\Forces\MagnetForce.cs" />
-    <Compile Include="Physics\IBoundingBox.cs" />
-    <Compile Include="Physics\IDynamicBody.cs" />
+    <Compile Include="Physics\IBody.cs" />
     <Compile Include="Physics\IPhysicsEngine.cs" />
     <Compile Include="Physics\PhysicsEngine.cs" />
     <Compile Include="Physics\PhysicsObject.cs" />

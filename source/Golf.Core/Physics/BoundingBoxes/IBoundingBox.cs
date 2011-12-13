@@ -1,7 +1,7 @@
 using System;
 using Golf.Core.Maths;
 
-namespace Golf.Core.Physics
+namespace Golf.Core.Physics.BoundingBoxes
 {
     public interface IBoundingBox
     {

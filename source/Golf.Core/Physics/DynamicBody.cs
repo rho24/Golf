@@ -5,7 +5,7 @@ using Golf.Core.Physics.Forces;
 
 namespace Golf.Core.Physics
 {
-    public class DynamicBody : IDynamicBody
+    public class DynamicBody : IBody
     {
         public DynamicBody() {
             Position = Vector2.Zero;

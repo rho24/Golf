@@ -6,11 +6,11 @@ namespace Golf.Core.Physics
     public class PhysicsObject
     {
         public GameObjectBase GameObject { get; private set; }
-        public DynamicBody DynamicBody { get; private set; }
+        public DynamicBody Body { get; private set; }
 
-        public PhysicsObject(GameObjectBase gameObject, DynamicBody dynamicBody) {
+        public PhysicsObject(GameObjectBase gameObject, DynamicBody body) {
             GameObject = gameObject;
-            DynamicBody = dynamicBody;
+            Body = body;
         }
     }
 }

@@ -39,16 +39,16 @@ namespace Golf.Core.Physics
 
         #region IPhysicsEngine Members
 
-        public bool IsInRest { get { return _physicsObjects.All(p => p.DynamicBody.IsInRest); } }
+        public bool IsInRest { get { return _physicsObjects.All(p => p.Body.IsInRest); } }
 
         public void Tick(TimeSpan tickPeriod) {
             foreach (var physicsObject in _physicsObjects) {
-                physicsObject.DynamicBody.Position +=
-                    physicsObject.DynamicBody.Velocity*tickPeriod.TotalSeconds;
+                physicsObject.Body.Position +=
+                    physicsObject.Body.Velocity*tickPeriod.TotalSeconds;
 
-                var velocityResult = CalculateVelocity(physicsObject.DynamicBody, tickPeriod);
-                physicsObject.DynamicBody.Velocity = velocityResult.Velocity;
-                physicsObject.DynamicBody.IsInRest = velocityResult.IsInRest;
+                var velocityResult = CalculateVelocity(physicsObject.Body, tickPeriod);
+                physicsObject.Body.Velocity = velocityResult.Velocity;
+                physicsObject.Body.IsInRest = velocityResult.IsInRest;
             }
             _eventTriggerer.Trigger(new Tick());
         }
@@ -98,32 +98,32 @@ namespace Golf.Core.Physics
         void ChangePosition(PositionChangeRequest message) {
             var physicsObject = _physicsObjects.Where(p => p.GameObject == message.GameObject).Single();
 
-            physicsObject.DynamicBody.Position = message.Position;
+            physicsObject.Body.Position = message.Position;
             _eventTriggerer.Trigger(new PositionChanged(message.GameObject));
         }
 
         void ApplyImpulse(ApplyImpulseRequest message) {
             var physicsObject = _physicsObjects.Where(p => p.GameObject == message.GameObject).Single();
 
-            physicsObject.DynamicBody.Velocity += message.Impulse;
+            physicsObject.Body.Velocity += message.Impulse;
         }
 
         void AddForce(AddForceRequest e) {
             var physicsObject = _physicsObjects.Where(p => p.GameObject == e.GameObject).Single();
 
             if (e.Force is IResistiveForce)
-                physicsObject.DynamicBody.ResistiveForces.Add(e.Force);
+                physicsObject.Body.ResistiveForces.Add(e.Force);
             else
-                physicsObject.DynamicBody.Forces.Add(e.Force);
+                physicsObject.Body.Forces.Add(e.Force);
         }
 
         void RemoveForce(RemoveForceRequest e) {
             var physicsObject = _physicsObjects.Where(p => p.GameObject == e.GameObject).Single();
 
             if (e.Force is IResistiveForce)
-                physicsObject.DynamicBody.ResistiveForces.Remove(e.Force);
+                physicsObject.Body.ResistiveForces.Remove(e.Force);
             else
-                physicsObject.DynamicBody.Forces.Remove(e.Force);
+                physicsObject.Body.Forces.Remove(e.Force);
         }
     }
 }

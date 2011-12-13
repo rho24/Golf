@@ -1,5 +1,6 @@
 using System;
 using Golf.Core.Maths;
+using Golf.Core.Physics.BoundingBoxes;
 using Golf.Core.Physics.Forces;
 
 namespace Golf.Core.Physics.Surfaces
