@@ -6,8 +6,8 @@ using developwithpassion.specifications.fakeiteasy;
 
 namespace Golf.Core.Specs.Events
 {
-    [Subject(typeof (Core.Events.EventManager))]
-    public class EventManagerSpecs : Observes<Core.Events.EventManager>
+    [Subject(typeof (EventManager))]
+    public class EventManagerSpecs : Observes<EventManager>
     {}
 
     public class when_Add_is_called : EventManagerSpecs

@@ -27,12 +27,12 @@ namespace Golf.Core
         public GolfBall PlayersBall { get; private set; }
 
         public void Initialize() {
-            _eventTriggerer.Trigger(new RequestAddSurface(
+            _eventTriggerer.Trigger(new AddSurfaceRequest(
                 new RectangleSurface(
                               new RectangleBoundingBox(
                                   new Vector2(20, 20),
                                   new Vector2(400, 400)),
-                              150)));
+                              new ConstantResistiveForce(150))));
 
             PlayersBall = new GolfBall {
                                            Mass = 1.0
@@ -42,7 +42,7 @@ namespace Golf.Core
         }
 
         public void PlayShot(double powerX, double powerY) {
-            _eventTriggerer.Trigger(new ApplyImpulse(PlayersBall, new Vector2(powerX, powerY)));
+            _eventTriggerer.Trigger(new ApplyImpulseRequest(PlayersBall, new Vector2(powerX, powerY)));
 
             Task.Factory.StartNew(RunShotToCompletion).ContinueWith(t => _eventTriggerer.Trigger(new ShotComplete()));
         }

@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using System.Windows.Controls;
 using Golf.Client.ViewModels;
 using Golf.Client.Views;
+using Golf.Core;
 using Golf.Core.Events;
 using Golf.Core.GameObjects;
 using Golf.Core.Physics.Surfaces;

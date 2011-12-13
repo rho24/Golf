@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using Golf.Core.Events;
+using Golf.Core.Maths;
+using Golf.Core.Physics.Forces;
 
 namespace Golf.Core.Physics
 {
@@ -25,8 +27,14 @@ namespace Golf.Core.Physics
                 .Subscribe(ChangePosition);
 
             events
-                .OfType<ApplyImpulse>()
+                .OfType<ApplyImpulseRequest>()
                 .Subscribe(ApplyImpulse);
+
+            events.OfType<RequestAddForce>()
+                .Subscribe(AddForce);
+
+            events.OfType<RequestRemoveForce>()
+                .Subscribe(RemoveForce);
         }
 
         #region IPhysicsEngine Members
@@ -36,17 +44,40 @@ namespace Golf.Core.Physics
                 physicsObject.DynamicBody.Position +=
                     physicsObject.DynamicBody.Velocity*tickPeriod.TotalSeconds;
 
-                var frictionInpulse = (-physicsObject.DynamicBody.Velocity.Normal)
-                                      *
-                                      Math.Min(physicsObject.GameObject.Surface.Friction*tickPeriod.TotalSeconds,
-                                               physicsObject.DynamicBody.Velocity.Length);
 
-                physicsObject.DynamicBody.Velocity += frictionInpulse;
+                physicsObject.DynamicBody.Velocity = CalculateVelocity(physicsObject.DynamicBody, tickPeriod);
             }
             _eventTriggerer.Trigger(new Tick());
         }
 
         #endregion
+
+        Vector2 CalculateVelocity(DynamicBody body, TimeSpan tickPeriod) {
+            var impulse = body.Forces.Aggregate(Vector2.Zero,
+                                                (current, force) =>
+                                                current + force.CalculateImpulse(body, tickPeriod));
+
+            var velocityBeforeResistance = body.Velocity + impulse;
+
+            var resistiveImpulse = body.ResistiveForces.Aggregate(Vector2.Zero,
+                                                                  (c, f) =>
+                                                                  c +
+                                                                  f.CalculateImpulse(body,
+                                                                                     tickPeriod));
+
+            return new Vector2(
+                AddStickingToZero(velocityBeforeResistance.X, resistiveImpulse.X),
+                AddStickingToZero(velocityBeforeResistance.Y, resistiveImpulse.Y));
+        }
+
+        double AddStickingToZero(double v1, double v2) {
+            var sum = v1 + v2;
+
+            if (Math.Sign(v1) != Math.Sign(sum))
+                return 0.0;
+
+            return sum;
+        }
 
         void AddGameObject(AddGameObjectRequest message) {
             var dynamicBody = new DynamicBody {Position = message.Position};
@@ -63,10 +94,28 @@ namespace Golf.Core.Physics
             _eventTriggerer.Trigger(new PositionChanged(message.GameObject));
         }
 
-        void ApplyImpulse(ApplyImpulse message) {
+        void ApplyImpulse(ApplyImpulseRequest message) {
             var physicsObject = _physicsObjects.Where(p => p.GameObject == message.GameObject).Single();
 
             physicsObject.DynamicBody.Velocity += message.Impulse;
+        }
+
+        void AddForce(RequestAddForce e) {
+            var physicsObject = _physicsObjects.Where(p => p.GameObject == e.GameObject).Single();
+
+            if (e.Force is IResistiveForce)
+                physicsObject.DynamicBody.ResistiveForces.Add(e.Force);
+            else
+                physicsObject.DynamicBody.Forces.Add(e.Force);
+        }
+
+        void RemoveForce(RequestRemoveForce e) {
+            var physicsObject = _physicsObjects.Where(p => p.GameObject == e.GameObject).Single();
+
+            if (e.Force is IResistiveForce)
+                physicsObject.DynamicBody.ResistiveForces.Remove(e.Force);
+            else
+                physicsObject.DynamicBody.Forces.Remove(e.Force);
         }
     }
 }

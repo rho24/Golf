@@ -1,6 +1,6 @@
 using System;
 
-namespace Golf.Core.Events
+namespace Golf.Core
 {
     public interface IGameEvent
     {}

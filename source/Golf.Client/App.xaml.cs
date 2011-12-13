@@ -7,7 +7,7 @@ using Golf.Core.Events;
 using Golf.Core.Physics;
 using Golf.Core.Physics.Surfaces;
 using Ninject;
-using EventManager = Golf.Core.Events.EventManager;
+using EventManager = Golf.Core.EventManager;
 
 namespace Golf.Client
 {

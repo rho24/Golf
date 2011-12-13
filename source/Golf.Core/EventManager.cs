@@ -1,7 +1,7 @@
 using System;
 using System.Reactive.Subjects;
 
-namespace Golf.Core.Events
+namespace Golf.Core
 {
     public class EventManager : IEventTriggerer
     {

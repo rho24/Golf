@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Windows.Controls;
+using Golf.Core;
 using Golf.Core.Events;
 
 namespace Golf.Client
