@@ -16,6 +16,7 @@ namespace Golf.Core.Physics
 
         public ICollection<IForce> Forces { get; set; }
         public ICollection<IForce> ResistiveForces { get; set; }
+        public bool IsInRest { get; set; }
 
         #region IDynamicBody Members
 

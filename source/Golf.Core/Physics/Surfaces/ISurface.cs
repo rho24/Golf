@@ -21,7 +21,7 @@ namespace Golf.Core.Physics.Surfaces
         #region IResistiveForce Members
 
         public Vector2 CalculateForce(DynamicBody body) {
-            return -body.Velocity.Normal*_friction;
+            return body.Velocity == Vector2.Zero ? Vector2.Zero : -body.Velocity.Normal*_friction;
         }
 
         #endregion

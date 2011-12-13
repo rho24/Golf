@@ -40,7 +40,7 @@ namespace Golf.Core
                                        };
 
             _eventTriggerer.Trigger(new AddGameObjectRequest(PlayersBall, new Vector2(100, 100)));
-            _eventTriggerer.Trigger(new AddForceRequest(PlayersBall, new MagnetForce(new Vector2(400,350), 100000)));
+            _eventTriggerer.Trigger(new AddForceRequest(PlayersBall, new MagnetForce(new Vector2(400, 350), 100000)));
         }
 
         public void PlayShot(double powerX, double powerY) {
@@ -52,7 +52,7 @@ namespace Golf.Core
         #endregion
 
         void RunShotToCompletion() {
-            while (PlayersBall.Body.Velocity.Length > 0.000001) {
+            while (!_physicsEngine.IsInRest) {
                 _physicsEngine.Tick(TimeSpan.FromMilliseconds(10));
 
                 Thread.Sleep(10);

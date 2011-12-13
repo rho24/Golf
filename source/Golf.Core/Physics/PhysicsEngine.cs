@@ -39,24 +39,27 @@ namespace Golf.Core.Physics
 
         #region IPhysicsEngine Members
 
+        public bool IsInRest { get { return _physicsObjects.All(p => p.DynamicBody.IsInRest); } }
+
         public void Tick(TimeSpan tickPeriod) {
             foreach (var physicsObject in _physicsObjects) {
                 physicsObject.DynamicBody.Position +=
                     physicsObject.DynamicBody.Velocity*tickPeriod.TotalSeconds;
 
-
-                physicsObject.DynamicBody.Velocity = CalculateVelocity(physicsObject.DynamicBody, tickPeriod);
+                var velocityResult = CalculateVelocity(physicsObject.DynamicBody, tickPeriod);
+                physicsObject.DynamicBody.Velocity = velocityResult.Velocity;
+                physicsObject.DynamicBody.IsInRest = velocityResult.IsInRest;
             }
             _eventTriggerer.Trigger(new Tick());
         }
 
         #endregion
 
-        Vector2 CalculateVelocity(DynamicBody body, TimeSpan tickPeriod) {
+        VelocityResult CalculateVelocity(DynamicBody body, TimeSpan tickPeriod) {
             var impulse = body.Forces.Aggregate(Vector2.Zero,
                                                 (current, force) =>
                                                 current + force.CalculateForce(body))
-                                                * tickPeriod.TotalSeconds;
+                          *tickPeriod.TotalSeconds;
 
             var velocityBeforeResistance = body.Velocity + impulse;
 
@@ -64,11 +67,15 @@ namespace Golf.Core.Physics
                                                                   (c, f) =>
                                                                   c +
                                                                   f.CalculateForce(body))
-                                                                  * tickPeriod.TotalSeconds;
+                                   *tickPeriod.TotalSeconds;
 
-            return new Vector2(
+            var velocity = new Vector2(
                 AddStickingToZero(velocityBeforeResistance.X, resistiveImpulse.X),
                 AddStickingToZero(velocityBeforeResistance.Y, resistiveImpulse.Y));
+
+            var isInRest = (velocity == Vector2.Zero && resistiveImpulse.Length > impulse.Length);
+
+            return new VelocityResult(velocity, isInRest);
         }
 
         double AddStickingToZero(double v1, double v2) {

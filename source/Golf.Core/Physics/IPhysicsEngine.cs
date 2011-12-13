@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using Golf.Core.GameObjects;
 
 namespace Golf.Core.Physics
 {
     public interface IPhysicsEngine
     {
+        bool IsInRest { get; }
         void Tick(TimeSpan tickPeriod);
     }
 }

@@ -79,6 +79,7 @@
     <Compile Include="Physics\Surfaces\ISurfaceManager.cs" />
     <Compile Include="Physics\Surfaces\RectangleSurface.cs" />
     <Compile Include="Physics\Surfaces\SurfaceManager.cs" />
+    <Compile Include="Physics\VelocityResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
