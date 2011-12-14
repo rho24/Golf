@@ -8,20 +8,28 @@ namespace Golf.Core.Physics
     public class DynamicBody : IBody
     {
         public DynamicBody() {
-            Position = Vector2.Zero;
-            Velocity = Vector2.Zero;
             Forces = new List<IForce>();
             ResistiveForces = new List<IForce>();
         }
 
         public ICollection<IForce> Forces { get; set; }
         public ICollection<IForce> ResistiveForces { get; set; }
-        public bool IsInRest { get; set; }
 
-        #region IDynamicBody Members
+        public bool IsInRest {
+            get { return State.IsInRest; }
+        }
 
-        public Vector2 Position { get; set; }
-        public Vector2 Velocity { get; set; }
+        public BodyState State { get; set; }
+
+        #region IBody Members
+
+        public Vector2 Position {
+            get { return State.Position; }
+        }
+
+        public Vector2 Velocity {
+            get { return State.Velocity; }
+        }
 
         #endregion
     }

@@ -36,14 +36,15 @@ namespace Golf.Core
                                             new ConstantResistiveForce(150))));
 
             _eventTriggerer.Trigger(new AddBarrierRequest(new LineBarrier(
-                new Vector2(400, 40),
-                new Vector2(400, 680))));
+                                                              new Vector2(400, 40),
+                                                              new Vector2(400, 680))));
 
             PlayersBall = new GolfBall {
                                            Mass = 1.0
                                        };
 
-            _eventTriggerer.Trigger(new AddGameObjectRequest(PlayersBall, new Vector2(100, 100)));
+            _eventTriggerer.Trigger(new AddGameObjectRequest(PlayersBall));
+            _eventTriggerer.Trigger(new PositionChangeRequest(PlayersBall, new Vector2(100, 100)));
             //_eventTriggerer.Trigger(new AddForceRequest(PlayersBall, new MagnetForce(new Vector2(400, 350), 100000)));
         }
 
@@ -69,12 +70,12 @@ namespace Golf.Core
 
     public class TickTime
     {
-        public TimeSpan TickElapsed { get; private set; }
-        public TimeSpan TotalElapsed { get; private set; }
-
         public TickTime(TimeSpan tickElapsed, TimeSpan totalElapsed) {
             TickElapsed = tickElapsed;
             TotalElapsed = totalElapsed;
         }
+
+        public TimeSpan TickElapsed { get; private set; }
+        public TimeSpan TotalElapsed { get; private set; }
     }
 }

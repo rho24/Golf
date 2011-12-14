@@ -50,35 +50,34 @@ namespace Golf.Core.Physics
                              select c).FirstOrDefault();
 
             if (collision != null) {
-                UpdatePositions(collision.CollisionTime);
+                UpdateKinematics(collision.CollisionTime);
                 collision.Apply(_eventTriggerer);
                 Tick(new TickTime(tickTime.TickElapsed - collision.CollisionTime, tickTime.TotalElapsed));
                 return;
             }
 
-            UpdatePositions(tickTime.TickElapsed);
-
-            UpdateVelocities(tickTime.TickElapsed);
+            UpdateKinematics(tickTime.TickElapsed);
 
             _eventTriggerer.Trigger(new Tick());
         }
 
         #endregion
 
-        void UpdatePositions(TimeSpan tickPeriod) {
+        void UpdateKinematics(TimeSpan tickPeriod) {
             foreach (var physicsObject in _physicsObjects) {
-                physicsObject.Body.Position +=
-                    physicsObject.Body.Velocity*tickPeriod.TotalSeconds;
+                physicsObject.Body.State = CalculateState(physicsObject.Body, tickPeriod);
             }
         }
 
-        void UpdateVelocities(TimeSpan tickPeriod) {
-            foreach (var physicsObject in _physicsObjects) {
+        BodyState CalculateState(DynamicBody body, TimeSpan tickPeriod) {
+            var position = body.Position + body.Velocity*tickPeriod.TotalSeconds;
+            var velocityResult = CalculateVelocity(body, tickPeriod);
 
-                var velocityResult = CalculateVelocity(physicsObject.Body, tickPeriod);
-                physicsObject.Body.Velocity = velocityResult.Velocity;
-                physicsObject.Body.IsInRest = velocityResult.IsInRest;
-            }
+            return new BodyState(
+                position,
+                velocityResult.Velocity,
+                velocityResult.IsInRest
+                );
         }
 
         VelocityResult CalculateVelocity
@@ -118,11 +117,10 @@ namespace Golf.Core.Physics
         void AddGameObject
             (AddGameObjectRequest
                  message) {
-            var dynamicBody = new DynamicBody {Position = message.Position};
+            var dynamicBody = new DynamicBody();
             message.GameObject.Body = dynamicBody;
             _physicsObjects.Add(new PhysicsObject(message.GameObject, dynamicBody));
             _eventTriggerer.Trigger(new GameObjectAdded(message.GameObject));
-            _eventTriggerer.Trigger(new PositionChanged(message.GameObject));
         }
 
         void ChangePosition
@@ -130,7 +128,7 @@ namespace Golf.Core.Physics
                  message) {
             var physicsObject = _physicsObjects.Where(p => p.GameObject == message.GameObject).Single();
 
-            physicsObject.Body.Position = message.Position;
+            physicsObject.Body.State = new BodyState(message.Position, Vector2.Zero, false);
             _eventTriggerer.Trigger(new PositionChanged(message.GameObject));
         }
 
@@ -139,7 +137,9 @@ namespace Golf.Core.Physics
                  message) {
             var physicsObject = _physicsObjects.Where(p => p.GameObject == message.GameObject).Single();
 
-            physicsObject.Body.Velocity += message.Impulse; //TODO: requires mass;
+            //TODO: requires mass;
+            physicsObject.Body.State = new BodyState(physicsObject.Body.Position,
+                                                     physicsObject.Body.Velocity + message.Impulse, false);
         }
 
         void AddForce
