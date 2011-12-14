@@ -69,10 +69,10 @@
     <Compile Include="Physics\Barriers\IBarrier.cs" />
     <Compile Include="Physics\Barriers\IBarriers.cs" />
     <Compile Include="Physics\Barriers\LineBarrier.cs" />
+    <Compile Include="Physics\BodyState.cs" />
     <Compile Include="Physics\BoundingBoxes\IBoundingBox.cs" />
     <Compile Include="Physics\BoundingBoxes\RectangleBoundingBox.cs" />
     <Compile Include="Physics\Collisions\ICollision.cs" />
-    <Compile Include="Physics\Collisions\SingleBallCollision.cs" />
     <Compile Include="Physics\DynamicBody.cs" />
     <Compile Include="Physics\Forces\IForce.cs" />
     <Compile Include="Physics\Forces\IResistiveForce.cs" />

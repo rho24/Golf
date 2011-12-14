@@ -5,12 +5,14 @@ using System.Reactive.Linq;
 using Golf.Core.Events;
 using Golf.Core.Maths;
 using Golf.Core.Physics.Barriers;
+using Golf.Core.Physics.Collisions;
 using Golf.Core.Physics.Forces;
 
 namespace Golf.Core.Physics
 {
     public class PhysicsEngine : IPhysicsEngine
     {
+        const int MaxCollisionDepth = 5;
         readonly IBarriers _barriers;
         readonly IEventTriggerer _eventTriggerer;
 
@@ -45,14 +47,14 @@ namespace Golf.Core.Physics
         public void Tick(TickTime tickTime) {
             var collision = (from o in _physicsObjects
                              from b in _barriers
-                             let c = b.CalculateCollision(o.GameObject, tickTime)
+                             let c = CalculateCollision(b, o.Body, TimeSpan.Zero, tickTime.TickElapsed, 0)
                              where c != null
                              orderby c.CollisionTime
                              select c).FirstOrDefault();
 
             if (collision != null) {
                 UpdateKinematics(collision.CollisionTime);
-                collision.Apply(_eventTriggerer);
+                collision.Barrier.ApplyCollision(_eventTriggerer, collision.Body);
                 Tick(new TickTime(tickTime.TickElapsed - collision.CollisionTime, tickTime.TotalElapsed));
                 return;
             }
@@ -64,15 +66,36 @@ namespace Golf.Core.Physics
 
         #endregion
 
-        void UpdateKinematics(TimeSpan tickPeriod) {
+        ICollision CalculateCollision(IBarrier barrier, DynamicBody body, TimeSpan start, TimeSpan end, int depth) {
+            var startState = CalculateState(body, start);
+            var endState = CalculateState(body, end);
+
+            if (barrier.IsCollision(body, startState, endState)) {
+                if (++depth == MaxCollisionDepth)
+                    return new Collision(start, barrier, body);
+
+                var middle = TimeSpan.FromSeconds((start + end).TotalSeconds/2.0);
+                var firstHalfCollision = CalculateCollision(barrier, body, start, middle, depth);
+
+                if (firstHalfCollision != null)
+                    return firstHalfCollision;
+
+                var secondHalfCollision = CalculateCollision(barrier, body, middle, end, depth);
+
+                return secondHalfCollision;
+            }
+            return null;
+        }
+
+        void UpdateKinematics(TimeSpan elapsed) {
             foreach (var physicsObject in _physicsObjects) {
-                physicsObject.Body.State = CalculateState(physicsObject.Body, tickPeriod);
+                physicsObject.Body.State = CalculateState(physicsObject.Body, elapsed);
             }
         }
 
-        BodyState CalculateState(DynamicBody body, TimeSpan tickPeriod) {
-            var position = body.Position + body.Velocity*tickPeriod.TotalSeconds;
-            var velocityResult = CalculateVelocity(body, tickPeriod);
+        BodyState CalculateState(DynamicBody body, TimeSpan elapsed) {
+            var position = body.Position + body.Velocity*elapsed.TotalSeconds;
+            var velocityResult = CalculateVelocity(body, elapsed);
 
             return new BodyState(
                 position,
@@ -82,11 +105,11 @@ namespace Golf.Core.Physics
         }
 
         VelocityResult CalculateVelocity
-            (DynamicBody body, TimeSpan tickPeriod) {
+            (DynamicBody body, TimeSpan elapsed) {
             var impulse = body.Forces.Aggregate(Vector2.Zero,
                                                 (current, force) =>
                                                 current + force.CalculateForce(body))
-                          *tickPeriod.TotalSeconds; //TODO: requires mass;
+                          *elapsed.TotalSeconds; //TODO: requires mass;
 
             var velocityBeforeResistance = body.Velocity + impulse;
 
@@ -94,7 +117,7 @@ namespace Golf.Core.Physics
                                                                   (c, f) =>
                                                                   c +
                                                                   f.CalculateForce(body))
-                                   *tickPeriod.TotalSeconds;
+                                   *elapsed.TotalSeconds;
 
             var velocity = new Vector2(
                 AddStickingToZero(velocityBeforeResistance.X, resistiveImpulse.X),
@@ -164,5 +187,26 @@ namespace Golf.Core.Physics
             else
                 physicsObject.Body.Forces.Remove(e.Force);
         }
+    }
+
+    public class Collision : ICollision
+    {
+        public Collision(TimeSpan collisionTime, IBarrier barrier, DynamicBody body) {
+            CollisionTime = collisionTime;
+            Barrier = barrier;
+            Body = body;
+        }
+
+        #region ICollision Members
+
+        public TimeSpan CollisionTime { get; private set; }
+        public IBarrier Barrier { get; private set; }
+        public DynamicBody Body { get; private set; }
+
+        public void Apply(IEventTriggerer eventTriggerer) {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }

@@ -1,11 +1,10 @@
 using System;
-using Golf.Core.GameObjects;
-using Golf.Core.Physics.Collisions;
 
 namespace Golf.Core.Physics.Barriers
 {
     public interface IBarrier
     {
-        ICollision CalculateCollision(GameObjectBase gameObject, TickTime tickTime);
+        bool IsCollision(DynamicBody body, BodyState startState, BodyState endState);
+        void ApplyCollision(IEventTriggerer eventTriggerer, DynamicBody body);
     }
 }
