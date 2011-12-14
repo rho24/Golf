@@ -6,6 +6,6 @@ namespace Golf.Core.Physics.Barriers
 {
     public interface IBarrier
     {
-        ICollision CalculateCollision(GameObjectBase gameObject, TimeSpan tickPeriod);
+        ICollision CalculateCollision(GameObjectBase gameObject, TickTime tickTime);
     }
 }

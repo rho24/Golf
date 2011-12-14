@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Threading;
 using Golf.Client.Views;
 using Golf.Core;
@@ -15,10 +16,12 @@ namespace Golf.Client.ViewModels
         readonly IViewController _viewController;
         ShotControlView _shotControlView;
 
-        public MainWindowViewModel(IGameEngine gameEngine, IObservable<IGameEvent> events, IViewController viewController) {
+        public MainWindowViewModel(IGameEngine gameEngine, IObservable<IGameEvent> events,
+                                   IViewController viewController) {
             _events = events;
             _viewController = viewController;
             GameEngine = gameEngine;
+            Hit = new ActionCommand(OnPlayerHit2);
         }
 
         public ObservableCollection<UserControl> SurfaceItems {
@@ -26,6 +29,7 @@ namespace Golf.Client.ViewModels
         }
 
         public IGameEngine GameEngine { get; private set; }
+        public ICommand Hit { get; set; }
 
         public void Initialize() {
             GameEngine.Initialize();
@@ -60,6 +64,15 @@ namespace Golf.Client.ViewModels
             SurfaceItems.Remove(_shotControlView);
             _shotControlView = null;
             GameEngine.PlayShot(model.PowerX, model.PowerY);
+        }
+
+        
+        void OnPlayerHit2() {
+            if (_shotControlView == null) return;
+            var model = (ShotControlViewModel) _shotControlView.DataContext;
+            SurfaceItems.Remove(_shotControlView);
+            _shotControlView = null;
+            GameEngine.PlayShot(400, 250);
         }
     }
 }

@@ -4,6 +4,9 @@
   <DockPanel>
     <Client:EventsDebugPanel x:Name="Events" DockPanel.Dock="Right" Width="200"></Client:EventsDebugPanel>
     <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Height="20">
+      <Button Command="{Binding Path=Hit}" Height="20" Width="80">
+        Hit
+      </Button>
     </StackPanel>
     <ItemsControl ItemsSource="{Binding Path=SurfaceItems}">
       <ItemsControl.ItemsPanel>

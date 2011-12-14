@@ -42,23 +42,23 @@ namespace Golf.Core.Physics
             get { return _physicsObjects.All(p => p.Body.IsInRest); }
         }
 
-        public void Tick(TimeSpan tickPeriod) {
+        public void Tick(TickTime tickTime) {
             var collision = (from o in _physicsObjects
                              from b in _barriers
-                             let c = b.CalculateCollision(o.GameObject, tickPeriod)
+                             let c = b.CalculateCollision(o.GameObject, tickTime)
                              where c != null
                              select c).FirstOrDefault();
 
             if (collision != null) {
                 UpdatePositions(collision.CollisionTime);
                 collision.Apply(_eventTriggerer);
-                Tick(tickPeriod - collision.CollisionTime);
+                Tick(new TickTime(tickTime.TickElapsed - collision.CollisionTime, tickTime.TotalElapsed));
                 return;
             }
 
-            UpdatePositions(tickPeriod);
+            UpdatePositions(tickTime.TickElapsed);
 
-            UpdateVelocities(tickPeriod);
+            UpdateVelocities(tickTime.TickElapsed);
 
             _eventTriggerer.Trigger(new Tick());
         }
@@ -74,8 +74,6 @@ namespace Golf.Core.Physics
 
         void UpdateVelocities(TimeSpan tickPeriod) {
             foreach (var physicsObject in _physicsObjects) {
-                physicsObject.Body.Position +=
-                    physicsObject.Body.Velocity*tickPeriod.TotalSeconds;
 
                 var velocityResult = CalculateVelocity(physicsObject.Body, tickPeriod);
                 physicsObject.Body.Velocity = velocityResult.Velocity;

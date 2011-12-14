@@ -5,6 +5,6 @@ namespace Golf.Core.Physics
     public interface IPhysicsEngine
     {
         bool IsInRest { get; }
-        void Tick(TimeSpan tickPeriod);
+        void Tick(TickTime tickTime);
     }
 }

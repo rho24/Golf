@@ -56,11 +56,25 @@ namespace Golf.Core
         #endregion
 
         void RunShotToCompletion() {
+            var totalElapsed = TimeSpan.Zero;
             do {
-                _physicsEngine.Tick(TimeSpan.FromMilliseconds(10));
-
-                Thread.Sleep(10);
+                var tickElapsed = TimeSpan.FromMilliseconds(10);
+                var tickTime = new TickTime(tickElapsed, totalElapsed);
+                _physicsEngine.Tick(tickTime);
+                totalElapsed += tickElapsed;
+                Thread.Sleep(tickElapsed.Milliseconds);
             } while (!_physicsEngine.IsInRest);
+        }
+    }
+
+    public class TickTime
+    {
+        public TimeSpan TickElapsed { get; private set; }
+        public TimeSpan TotalElapsed { get; private set; }
+
+        public TickTime(TimeSpan tickElapsed, TimeSpan totalElapsed) {
+            TickElapsed = tickElapsed;
+            TotalElapsed = totalElapsed;
         }
     }
 }

@@ -19,19 +19,19 @@ namespace Golf.Core.Physics.Barriers
 
         #region IBarrier Members
 
-        public ICollision CalculateCollision(GameObjectBase gameObject, TimeSpan tickPeriod) {
+        public ICollision CalculateCollision(GameObjectBase gameObject, TickTime tickTime) {
             if (gameObject.Body.Velocity == Vector2.Zero)
                 return null;
 
             if (gameObject is GolfBall)
-                return CalculateCollision((GolfBall) gameObject, tickPeriod);
+                return CalculateCollision((GolfBall) gameObject, tickTime);
 
             return null;
         }
 
         #endregion
 
-        public ICollision CalculateCollision(GolfBall ball, TimeSpan tickPeriod) {
+        public ICollision CalculateCollision(GolfBall ball, TickTime tickTime) {
             var ballPath = new Line(ball.Body.Position, ball.Body.Velocity);
             var intersection = _line.Intersect(ballPath);
 
@@ -39,10 +39,12 @@ namespace Golf.Core.Physics.Barriers
             if (intersection == null)
                 return null;
 
-            var collisionTime = (intersection - ball.Body.Position).Length/ball.Body.Velocity.Length;
-            
-            //var collisionTime = (intersection - ball.Body.Position).Dot(ball.Body.Velocity);
-            if (collisionTime < 0.0 || collisionTime >= tickPeriod.TotalSeconds)
+            var collisionTime = ball.Body.Velocity.Normal.Dot(intersection - ball.Body.Position)/
+                                ball.Body.Velocity.Length;
+
+            //var collisionTime = (intersection - ball.Body.Position).Normal.Dot(ball.Body.Velocity);
+
+            if (collisionTime < 0.0 || collisionTime >= tickTime.TickElapsed.TotalSeconds)
                 return null;
 
             var leftDistanceOnLine = _line.Normal.Dot(_leftPoint);
