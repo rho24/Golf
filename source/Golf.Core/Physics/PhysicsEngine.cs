@@ -47,6 +47,7 @@ namespace Golf.Core.Physics
                              from b in _barriers
                              let c = b.CalculateCollision(o.GameObject, tickTime)
                              where c != null
+                             orderby c.CollisionTime
                              select c).FirstOrDefault();
 
             if (collision != null) {
